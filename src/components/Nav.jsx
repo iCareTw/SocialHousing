@@ -34,6 +34,7 @@ const Nav = () => {
             className="nav-link"
             href="https://github.com/iCareTw/housing"
             target="_blank"
+            rel="noreferrer"
           >
             Source Code <img src={srcCode} class="img-fluid" alt="原始碼" />
           </a>
