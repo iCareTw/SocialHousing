@@ -1,7 +1,9 @@
+import srcCode from "./img/github-logo.png";
+
 const Nav = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <a className="navbar-brand" href="/housing">
+      <a className="navbar-brand" href="/#">
         CareTw
       </a>
       <button
@@ -19,23 +21,24 @@ const Nav = () => {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
-            <a className="nav-link" href="/housing">
-              社會住宅
-            </a>
-          </li>
-          <li>
             <a className="nav-link disabled" href="/">
-              (靈感枯竭)
+              社會住宅
             </a>
           </li>
         </ul>
       </div>
-      <form class="form-inline my-2 my-lg-0">
-        <i class="fa-brands fa-github" />
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-          Search
-        </button>
-      </form>
+
+      <ul className="navbar-nav mr-auto my-2 my-sm-0">
+        <li className="nav-item active">
+          <a
+            className="nav-link"
+            href="https://github.com/iCareTw/housing"
+            target="_blank"
+          >
+            Source Code <img src={srcCode} class="img-fluid" alt="原始碼" />
+          </a>
+        </li>
+      </ul>
     </nav>
   );
 };
