@@ -6,4 +6,4 @@ https://pip.moi.gov.tw/V3/B/SCRB0501.aspx?mode=4
 
 資料來源: 內政部
 
-視覺化網頁: https://github.com/iCareTw/housing
+視覺化網頁: https://icaretw.github.io/housing/
