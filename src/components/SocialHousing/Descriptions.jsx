@@ -28,7 +28,6 @@ const HousingDescriptions = () => {
   };
 
   const sourcePdf = (ym, originUrl) => {
-    const em = ym.slice(0, 4) - 1911 + ym.slice(4, 6);
     if (originUrl === "-" || originUrl === "") {
       return "-";
     } else {
