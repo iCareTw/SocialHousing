@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 
 import Nav from "./components/Nav";
 import Container from "react-bootstrap/Container";
@@ -7,7 +7,7 @@ import HousingDescription from "./components/SocialHousing/Descriptions";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="App">
         <Container>
           <Nav />
@@ -19,7 +19,7 @@ function App() {
           </Routes>
         </Container>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
