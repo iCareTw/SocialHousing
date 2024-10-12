@@ -1,10 +1,11 @@
 import srcCode from "./img/github-logo.png";
+import { Link } from "react-router-dom";
 
 const Nav = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <a className="navbar-brand" href="/housing">
-        CareTw
+        社會住宅
       </a>
       <button
         className="navbar-toggler"
@@ -21,9 +22,16 @@ const Nav = () => {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
           <li className="nav-item active">
-            <a className="nav-link disabled" href="/housing">
-              社會住宅
-            </a>
+            <Link className="nav-link" to="/housing">
+              趨勢圖
+            </Link>
+          </li>
+        </ul>
+        <ul className="navbar-nav mr-auto">
+          <li className="nav-item active">
+            <Link className="nav-link" to="/description">
+              資料簡介
+            </Link>
           </li>
         </ul>
       </div>
@@ -45,36 +53,3 @@ const Nav = () => {
 };
 
 export default Nav;
-
-/* <span className="navbar-brand mb-0 h1">
-        <Col xs={10}></Col>
-        <Col xs={1}>
-          <select
-            name="buildSubject"
-            id="buildSubject"
-            size="3"
-            // onChange={(e) => {
-            //   setGov(e.target.value);
-            // }}
-            // defaultValue={gov}
-          >
-            <option value="0">地方</option>
-            <option value="1">中央+地方</option>
-            <option value="2">中央</option>
-          </select>
-        </Col>
-        <Col xs={1}>
-          <select
-            name="cumulativeProgress"
-            id="cumulativeProgress"
-            size="2"
-            // onChange={(e) => {
-            //   setIsCumulative(e.target.value);
-            // }}
-            // defaultValue={isCumulative}
-          >
-            <option value="0">個別</option>
-            <option value="1">累計</option>
-          </select>
-        </Col>
-        </span> */
