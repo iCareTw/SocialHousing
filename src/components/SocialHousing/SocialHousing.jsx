@@ -32,7 +32,7 @@ const SocialHousing = () => {
   const [diagramData, setDiagramData] = useState([]);
   const [barColor, setBarColor] = useState([]);
 
-  const [autoMax, setAutoMax] = useState(false);
+  const [autoMax, setAutoMax] = useState(true);
   const [maxY, setMaxY] = useState(120000);
 
   const updateChecked = (originalList, idx) => {
