@@ -33,6 +33,9 @@ export const Diagrams = ({ data, barColor, maxY, autoMax }) => {
               <CartesianGrid strokeDasharray="7 7" />
               <XAxis dataKey="t" />
               <YAxis
+                tickFormatter={tick => {
+                  return tick.toLocaleString();
+                }}
                 scale="linear"
                 min={1000}
                 domain={[
@@ -43,10 +46,8 @@ export const Diagrams = ({ data, barColor, maxY, autoMax }) => {
                   }
                 ]}
               />
-
-              <Tooltip />
+              <Tooltip formatter={value => value && value.toLocaleString()} />
               <Legend height={18} />
-              {/*  */}
               {barColor.map(barInfo =>
                 <Bar
                   key={barInfo.name} // 用來消除 warning
