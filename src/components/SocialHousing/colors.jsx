@@ -14,5 +14,10 @@ export const progressBarInfoList = [
   { name: "新完工", color: "#28c7c7" },
   { name: "興建中", color: "#ffcc00" },
   { name: "已決標待開工", color: "#75e561" },
-  { name: "規劃中", color: "#eee" }
+  { name: "規劃中", color: "#e8e8e8" }
+];
+
+export const governmentBarInfoList = [
+  { name: "中央", color: "#ff69b4" },
+  { name: "地方", color: "#ffbb00" }
 ];

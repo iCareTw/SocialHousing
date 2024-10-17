@@ -12,7 +12,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { Diagrams } from "./Diagrams";
 import { aggregateData } from "./Calculator";
 import realData from "./data";
-import { subjectBarInfoList, progressBarInfoList } from "./colors";
+import {
+  subjectBarInfoList,
+  progressBarInfoList,
+  governmentBarInfoList
+} from "./colors";
 
 // 排除惱人的 warning 警告訊息:
 // Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.
@@ -22,11 +26,11 @@ console.error = () => {
 };
 
 const SocialHousing = () => {
-  const [category, setCategory] = useState("p"); // 主體s , 進度p
+  const [category, setCategory] = useState("p"); // 主體s , 進度p, 中央地方g
   const [checkedProgress, setCheckedProgress] = useState([0, 1, 1, 1, 0]); // [既有 , 新完工 , 興建中 ,  待開工 , 規劃中]
   const [checkedRegion, setCheckedRegion] = useState([1, 1, 1, 1, 1, 1, 1]); // [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 其他縣市]
   const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
-  // const [tg, setTg] = useState(false); // 將中央進度歸屬地方
+  const [disableLocalCentral, setDisableLocalCentral] = useState(false);
 
   const [rawData, setRawData] = useState([]);
   const [diagramData, setDiagramData] = useState([]);
@@ -47,8 +51,10 @@ const SocialHousing = () => {
       setRawData(realData);
       if (category === "p") {
         setBarColor(progressBarInfoList); // 每根 Bar 區分為 完工類別
-      } else {
+      } else if (category === "s") {
         setBarColor(subjectBarInfoList); // 每根 Bar 區分為 興辦主體
+      } else if (category === "g") {
+        setBarColor(governmentBarInfoList); // 每根 Bar 區分為 中央地方
       }
       const d1 = aggregateData(
         rawData.sort((a, b) => parseInt(a.t) - parseInt(b.t)),
@@ -60,8 +66,18 @@ const SocialHousing = () => {
       setDiagramData(d1);
     },
     [rawData, category, checkedProgress, checkedRegion, checkedGov]
-    // [rawData, category, checkedProgress, checkedRegion, checkedGov, tg]
   );
+
+  const uiOperation = e => {
+    setCategory(e.target.value);
+
+    if (e.target.value === "g") {
+      setDisableLocalCentral(true);
+      setCheckedGov([1, 1]);
+    } else {
+      setDisableLocalCentral(false);
+    }
+  };
 
   return (
     <Container>
@@ -73,11 +89,12 @@ const SocialHousing = () => {
               className="form-select"
               name="byCategory"
               defaultValue={category}
-              onChange={e => setCategory(e.target.value)}
-              size="2"
+              onChange={e => uiOperation(e)}
+              size="3"
             >
               <option value="p">依進度別</option>
               <option value="s">依興辦主體</option>
+              <option value="g">依政府層級</option>
             </select>
           </Row>
           <Row>
@@ -230,6 +247,7 @@ const SocialHousing = () => {
                   <Checkbox
                     checked={checkedGov.at(0)}
                     onChange={e => setCheckedGov(updateChecked(checkedGov, 0))}
+                    disabled={disableLocalCentral}
                     name="0"
                   />
                 }
@@ -240,6 +258,7 @@ const SocialHousing = () => {
                   <Checkbox
                     checked={checkedGov.at(1)}
                     onChange={e => setCheckedGov(updateChecked(checkedGov, 1))}
+                    disabled={disableLocalCentral}
                     name="1"
                   />
                 }
@@ -261,15 +280,6 @@ const SocialHousing = () => {
           </Row>
         </Col>
         <Col xs={2}>
-          {/* TODO: tg  將中央政績歸類到地方 */}
-          {/* <Row>
-            <FormControlLabel
-              control={
-                <Checkbox checked={tg} onChange={e => setTg(!tg)} name="3" />
-              }
-              label="中央進度歸屬地方"
-            />
-          </Row> */}
           <Row>
             <FormControlLabel
               control={

@@ -33,7 +33,15 @@ export const aggregateData = (
     filteredGov
   ) {
     let result = [];
-    const grpKey = category === "p" ? "c" : "r"; // p -> c ; s -> r
+
+    let grpKey;
+    if (category === "p") {
+      grpKey = "c";
+    } else if (category === "s") {
+      grpKey = "r";
+    } else {
+      grpKey = "g";
+    }
 
     for (const ym of ymRange.values()) {
       const rows = data.filter(item => item.t === ym);
