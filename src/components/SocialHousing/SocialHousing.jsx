@@ -8,6 +8,7 @@ import Checkbox from "@mui/material/Checkbox";
 import FormLabel from "@mui/material/FormLabel";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Input from "@mui/material/Input";
 
 import { Diagrams } from "./Diagrams";
 import { aggregateData } from "./Calculator";
@@ -291,14 +292,17 @@ const SocialHousing = () => {
               }
               label="自動化最大Y軸"
             />
-            <input
-              className="form-control"
+            <Input
               type="number"
-              step="1000"
-              max="140000"
-              min="1000"
+              color="primary"
+              inputProps={{
+                maxLength: 5,
+                step: "2000",
+                min: "2000",
+                max: "140000"
+              }}
               hidden={autoMax}
-              value={maxY}
+              defaultValue={maxY}
               onChange={e => setMaxY(e.target.value)}
             />
           </Row>
