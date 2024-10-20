@@ -1,8 +1,8 @@
 {
   "name": "web",
   "version": "0.1.0",
-  "description": "About housing",
-  "homepage": "https://icaretw.github.io/housing",
+  "description": "About SocialHousing",
+  "homepage": "https://icaretw.github.io/SocialHousing",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
