@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/housing/static/js/main.5bef1437.js",
-    "index.html": "/housing/index.html",
-    "main.5bef1437.js.map": "/housing/static/js/main.5bef1437.js.map"
+    "main.js": "/SocialHousing/static/js/main.5bef1437.js",
+    "index.html": "/SocialHousing/index.html",
+    "main.5bef1437.js.map": "/SocialHousing/static/js/main.5bef1437.js.map"
   },
   "entrypoints": [
     "static/js/main.5bef1437.js"
