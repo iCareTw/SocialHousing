@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Nav = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <a className="navbar-brand" href="/housing" aria-disabled="true">
+      <a className="navbar-brand" href="/SocialHousing" aria-disabled="true">
         社會住宅
       </a>
       <button
