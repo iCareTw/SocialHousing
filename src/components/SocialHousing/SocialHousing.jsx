@@ -28,7 +28,7 @@ console.error = () => {
 
 const SocialHousing = () => {
   const [category, setCategory] = useState("p"); // 主體s , 進度p, 中央地方g
-  const [checkedProgress, setCheckedProgress] = useState([0, 1, 1, 1, 0]); // [既有 , 新完工 , 興建中 ,  待開工 , 規劃中]
+  const [checkedProgress, setCheckedProgress] = useState([1, 1, 1, 1, 1]); // [既有 , 新完工 , 興建中 ,  待開工 , 規劃中]
   const [checkedRegion, setCheckedRegion] = useState([1, 1, 1, 1, 1, 1, 1]); // [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 其他縣市]
   const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
   const [disableLocalCentral, setDisableLocalCentral] = useState(false);
@@ -37,8 +37,8 @@ const SocialHousing = () => {
   const [diagramData, setDiagramData] = useState([]);
   const [barColor, setBarColor] = useState([]);
 
-  const [autoMax, setAutoMax] = useState(true);
-  const [maxY, setMaxY] = useState(120000);
+  const [autoMax, setAutoMax] = useState(false);
+  const [maxY, setMaxY] = useState(130000);
 
   const updateChecked = (originalList, idx) => {
     return originalList.map(
