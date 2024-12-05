@@ -66,6 +66,9 @@ const HousingDescriptions = () => {
           202303(11203)起, 改以摘要表格方式公告(不公告個案), 並開始公告 <code>既有</code> 及{" "}
           <code>規劃中</code>
         </ListGroup.Item>
+        <ListGroup.Item>
+          202411(11311), 將六都以外的其他縣市全數揭露 
+        </ListGroup.Item>
       </ListGroup>
 
       <h2>
