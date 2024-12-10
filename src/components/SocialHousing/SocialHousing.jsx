@@ -101,170 +101,58 @@ const SocialHousing = () => {
           <Row>
             <FormLabel component="legend">進度別</FormLabel>
             <FormGroup>
-              <FormControlLabel
+              {progressBarInfoList.map(progress =>
+                <FormControlLabel
                 control={
                   <Checkbox
-                    checked={checkedProgress.at(0)}
+                    checked={checkedProgress.at(progress.id)}
                     onChange={e =>
-                      setCheckedProgress(updateChecked(checkedProgress, 0))}
-                    name="0"
+                      setCheckedProgress(updateChecked(checkedProgress, progress.id))}
+                    name={String(progress.id)}
                   />
                 }
-                label="既有"
+                label={progress.name}
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedProgress.at(4)}
-                    onChange={e =>
-                      setCheckedProgress(updateChecked(checkedProgress, 4))}
-                    name="4"
-                  />
-                }
-                label="規劃中"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedProgress.at(3)}
-                    onChange={e =>
-                      setCheckedProgress(updateChecked(checkedProgress, 3))}
-                    name="3"
-                  />
-                }
-                label="已決標待開工"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedProgress.at(2)}
-                    onChange={e =>
-                      setCheckedProgress(updateChecked(checkedProgress, 2))}
-                    name="2"
-                  />
-                }
-                label="興建中"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedProgress.at(1)}
-                    onChange={e =>
-                      setCheckedProgress(updateChecked(checkedProgress, 1))}
-                    name="1"
-                  />
-                }
-                label="新完工"
-              />
+              )}
             </FormGroup>
           </Row>
           <Row>
             <FormLabel component="legend">區域別</FormLabel>
             <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedRegion.at(0)}
-                    onChange={e =>
-                      setCheckedRegion(updateChecked(checkedRegion, 0))}
-                    name="0"
+              {subjectBarInfoList
+                .slice(0, 7)
+                .map(region =>
+                  <FormControlLabel
+                    key={region.id}
+                    control={
+                      <Checkbox
+                        checked={checkedRegion.at(region.id)}
+                        onChange={e =>
+                          setCheckedRegion(updateChecked(checkedRegion, region.id))}
+                        name={String(region.id)}
+                      />
+                    }
+                    label={region.name}
                   />
-                }
-                label="臺北市"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedRegion.at(1)}
-                    onChange={e =>
-                      setCheckedRegion(updateChecked(checkedRegion, 1))}
-                    name="1"
-                  />
-                }
-                label="新北市"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedRegion.at(2)}
-                    onChange={e =>
-                      setCheckedRegion(updateChecked(checkedRegion, 2))}
-                    name="2"
-                  />
-                }
-                label="桃園市"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedRegion.at(3)}
-                    onChange={e =>
-                      setCheckedRegion(updateChecked(checkedRegion, 3))}
-                    name="3"
-                  />
-                }
-                label="臺中市"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedRegion.at(4)}
-                    onChange={e =>
-                      setCheckedRegion(updateChecked(checkedRegion, 4))}
-                    name="4"
-                  />
-                }
-                label="臺南市"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedRegion.at(5)}
-                    onChange={e =>
-                      setCheckedRegion(updateChecked(checkedRegion, 5))}
-                    name="5"
-                  />
-                }
-                label="高雄市"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedRegion.at(6)}
-                    onChange={e =>
-                      setCheckedRegion(updateChecked(checkedRegion, 6))}
-                    name="6"
-                  />
-                }
-                label="其他縣市"
-              />
+                )}
             </FormGroup>
           </Row>
           <Row>
             <FormLabel component="legend">興辦主體</FormLabel>
             <FormGroup>
-              <FormControlLabel
+              {governmentBarInfoList.map(gov => (
+                <FormControlLabel
                 control={
                   <Checkbox
-                    checked={checkedGov.at(0)}
-                    onChange={e => setCheckedGov(updateChecked(checkedGov, 0))}
+                    checked={checkedGov.at(gov.id)}
+                    onChange={e => setCheckedGov(updateChecked(checkedGov, gov.id))}
                     disabled={disableLocalCentral}
-                    name="0"
+                    name={String(gov.id)}
                   />
                 }
-                label="地方"
+                label={gov.name}
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedGov.at(1)}
-                    onChange={e => setCheckedGov(updateChecked(checkedGov, 1))}
-                    disabled={disableLocalCentral}
-                    name="1"
-                  />
-                }
-                label="中央"
-              />
+              ))}
             </FormGroup>
           </Row>
         </Col>
