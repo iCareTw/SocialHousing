@@ -46,10 +46,7 @@ const HousingDescriptions = () => {
       </h2>
       <ListGroup>
         <ListGroup.Item>
-          2017(106) 資料來源為 <code>nlma.gov.tw</code> - 內政部國土管理署
-        </ListGroup.Item>
-        <ListGroup.Item>
-          2018(107)起, 資料來源為 <code>pip.moi.gov.tw</code> - 內政部不動產資訊平台
+          資料來源為 <code>pip.moi.gov.tw</code> - 內政部不動產資訊平台
         </ListGroup.Item>
         <ListGroup.Item>201809(10709)起, 開時每月公告社會住宅興辦進度</ListGroup.Item>
         <ListGroup.Item>
@@ -70,7 +67,7 @@ const HousingDescriptions = () => {
           202411(11311), 將六都以外的其他縣市全數揭露
         </ListGroup.Item>
         <ListGroup.Item>
-          202412(11312), 將 <code>既有</code> 併入到 <code>新完工</code> (並且 pdf 欄位更名為 <code>已完工</code>)
+          202412(11312), 將 <code>既有</code> 併入到 <code>新完工</code> (pdf 欄位更名為 <code>已完工</code>)
         </ListGroup.Item>
       </ListGroup>
 
