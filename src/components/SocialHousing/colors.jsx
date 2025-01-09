@@ -5,8 +5,7 @@ export const subjectBarInfoList = [
   { id: 3, name: "臺中市", color: "#87CEFA" },
   { id: 4, name: "臺南市", color: "green" },
   { id: 5, name: "高雄市", color: "#75e561" },
-  { id: 6, name: "其他縣市", color: "#e5e561" },
-  { id: 7, name: "中央", color: "#ff69b4" }
+  { id: 6, name: "其他縣市", color: "#e5e561" }
 ];
 
 export const progressBarInfoList = [
@@ -14,10 +13,10 @@ export const progressBarInfoList = [
   { id: 1, name: "新完工", color: "#28c7c7" },
   { id: 2, name: "興建中", color: "#ffcc00" },
   { id: 3, name: "已決標待開工", color: "#75e561" },
-  { id: 4, name: "規劃中", color: "#e8e8e8" }
+  { id: 4, name: "規劃中", color: "#cdcdcd" }
 ];
 
 export const governmentBarInfoList = [
-  { id: 0, name: "地方", color: "#ffbb00" },
-  { id: 1, name: "中央", color: "#ff69b4" }
+  { id: 0, name: "地方", color: "#86e056" },
+  { id: 1, name: "中央", color: "#ffcf2d" }
 ];

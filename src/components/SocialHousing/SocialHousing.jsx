@@ -38,7 +38,7 @@ const SocialHousing = () => {
   const [barColor, setBarColor] = useState([]);
 
   const [autoMax, setAutoMax] = useState(false);
-  const [maxY, setMaxY] = useState(130000);
+  const [maxY, setMaxY] = useState(200000);
 
   const updateChecked = (originalList, idx) => {
     return originalList.map(
@@ -187,7 +187,7 @@ const SocialHousing = () => {
                 maxLength: 5,
                 step: "2000",
                 min: "2000",
-                max: "140000"
+                max: "200000"
               }}
               hidden={autoMax}
               defaultValue={maxY}
