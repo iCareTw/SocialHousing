@@ -392,13 +392,13 @@ export const dataSources = [
   {
     ym: "201706",
     source:
-      "https://publichousing.nlma.gov.tw/ezfiles/0/1000/attach/17/pta_11644_7066053_62250.pdf"
+      "https://pip.moi.gov.tw/ezfiles/ezfiles/0/1000/attach/17/pta_11644_7066053_62250.pdf"
   },
   { ym: "201705", source: "" },
   { ym: "201704", source: "" },
   {
     ym: "201703",
     source:
-      "https://publichousing.nlma.gov.tw/ezfiles/0/1000/attach/92/pta_10258_2939239_40345.pdf"
+      "https://pip.moi.gov.tw/ezfiles/ezfiles/0/1000/attach/92/pta_10258_2939239_40345.pdf"
   }
 ];

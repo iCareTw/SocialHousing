@@ -97,10 +97,10 @@
 | 201709 | -                                      | -                                                                                                     |
 | 201708 | -                                      | -                                                                                                     |
 | 201707 | -                                      | -                                                                                                     |
-| 201706 | [10606](./pdf_SocialHousing/10606.pdf) | https://publichousing.nlma.gov.tw/ezfiles/0/1000/attach/17/pta_11644_7066053_62250.pdf                |
+| 201706 | [10606](./pdf_SocialHousing/10606.pdf) | https://pip.moi.gov.tw/ezfiles/ezfiles/0/1000/attach/17/pta_11644_7066053_62250.pdf                   |
 | 201705 | -                                      | -                                                                                                     |
 | 201704 | -                                      | -                                                                                                     |
-| 201703 | [10603](./pdf_SocialHousing/10603.pdf) | https://publichousing.nlma.gov.tw/ezfiles/0/1000/attach/92/pta_10258_2939239_40345.pdf                |
+| 201703 | [10603](./pdf_SocialHousing/10603.pdf) | https://pip.moi.gov.tw/ezfiles/ezfiles/0/1000/attach/92/pta_10258_2939239_40345.pdf                   |
 
 ## 主要差異補充說明
 
