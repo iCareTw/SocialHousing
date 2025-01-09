@@ -1,5 +1,10 @@
 export const dataSources = [
   {
+    ym: "202412",
+    source:
+      "https://pip.moi.gov.tw/Upload/File/SocialHousing/1140107-社會住宅興辦案件執行情形彙整.pdf"
+  },
+  {
     ym: "202411",
     source:
       "https://pip.moi.gov.tw/Upload/File/SocialHousing/1131130-社會住宅興辦案件執行情形彙整表.pdf"

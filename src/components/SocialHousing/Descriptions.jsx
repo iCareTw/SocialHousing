@@ -67,7 +67,10 @@ const HousingDescriptions = () => {
           <code>規劃中</code>
         </ListGroup.Item>
         <ListGroup.Item>
-          202411(11311), 將六都以外的其他縣市全數揭露 
+          202411(11311), 將六都以外的其他縣市全數揭露
+        </ListGroup.Item>
+        <ListGroup.Item>
+          202412(11312), 將 <code>既有</code> 併入到 <code>新完工</code> (並且 pdf 欄位更名為 <code>已完工</code>)
         </ListGroup.Item>
       </ListGroup>
 
