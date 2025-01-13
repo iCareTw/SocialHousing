@@ -20,3 +20,7 @@ export const governmentBarInfoList = [
   { id: 0, name: "地方", color: "#86e056" },
   { id: 1, name: "中央", color: "#ffcf2d" }
 ];
+
+export const totalBarInfoList = [
+  { id: 0, name: "合計", color: "#66B2FF" },
+];

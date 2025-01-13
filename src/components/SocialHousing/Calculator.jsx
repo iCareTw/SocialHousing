@@ -34,23 +34,34 @@ export const aggregateData = (
   ) {
     let result = [];
 
-    let grpKey;
+    let itemKey;
     if (category === "p") {
-      grpKey = "c";
+      itemKey = "c";
     } else if (category === "s") {
-      grpKey = "r";
+      itemKey = "r";
+    } else if (category === "g") {
+      itemKey = "g";
     } else {
-      grpKey = "g";
+      itemKey = "t";
     }
 
-    for (const ym of ymRange.values()) {
+    for (let ym of ymRange.values()) {
       const rows = data.filter(item => item.t === ym);
-      const categorySet = new Set(rows.map(item => item[grpKey]));
+
+      let categorySet;
+      if (itemKey === "t") {
+        categorySet = new Set("t");
+      } else {
+        categorySet = new Set(rows.map(item => item[itemKey]));
+      }
       const tmp = { t: ym };
 
-      for (const grp of categorySet.values()) {
-        tmp[grp] = rows
-          .filter(item => item[grpKey] === grp)
+      for (const cat of categorySet.values()) {
+        let { kk, vv } =
+          cat === "t" ? { kk: "a", vv: ym } : { kk: cat, vv: cat };
+
+        tmp[kk] = rows
+          .filter(item => item[itemKey] === vv)
           .filter(
             item =>
               filteredProgress.includes(item.c) &&
@@ -61,6 +72,15 @@ export const aggregateData = (
       }
       result.push(tmp);
     }
+
+    // 當期合計
+    if (category === "a") {
+      result = result.map(item => {
+        let { a, ...rest } = item;
+        return { ...rest, 合計: a };
+      });
+    }
+
     return result;
   }
 

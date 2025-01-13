@@ -16,7 +16,8 @@ import realData from "./data";
 import {
   subjectBarInfoList,
   progressBarInfoList,
-  governmentBarInfoList
+  governmentBarInfoList,
+  totalBarInfoList
 } from "./colors";
 
 // 排除惱人的 warning 警告訊息:
@@ -27,7 +28,7 @@ console.error = () => {
 };
 
 const SocialHousing = () => {
-  const [category, setCategory] = useState("p"); // 主體s , 進度p, 中央地方g
+  const [category, setCategory] = useState("a"); // 主體s , 進度p, 中央地方g, 總計a
   const [checkedProgress, setCheckedProgress] = useState([1, 1, 1, 1, 1]); // [既有 , 新完工 , 興建中 ,  待開工 , 規劃中]
   const [checkedRegion, setCheckedRegion] = useState([1, 1, 1, 1, 1, 1, 1]); // [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 其他縣市]
   const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
@@ -56,6 +57,8 @@ const SocialHousing = () => {
         setBarColor(subjectBarInfoList); // 每根 Bar 區分為 興辦主體
       } else if (category === "g") {
         setBarColor(governmentBarInfoList); // 每根 Bar 區分為 中央地方
+      } else if (category === "a") {
+        setBarColor(totalBarInfoList); // 每根 Bar 為總計
       }
       const d1 = aggregateData(
         rawData.sort((a, b) => parseInt(a.t) - parseInt(b.t)),
@@ -91,8 +94,9 @@ const SocialHousing = () => {
               name="byCategory"
               defaultValue={category}
               onChange={e => uiOperation(e)}
-              size="3"
+              size="4"
             >
+              <option value="a">當期合計</option>
               <option value="p">依進度別</option>
               <option value="s">依興辦主體</option>
               <option value="g">依政府層級</option>
@@ -103,16 +107,18 @@ const SocialHousing = () => {
             <FormGroup>
               {progressBarInfoList.map(progress =>
                 <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedProgress.at(progress.id)}
-                    onChange={e =>
-                      setCheckedProgress(updateChecked(checkedProgress, progress.id))}
-                    name={String(progress.id)}
-                  />
-                }
-                label={progress.name}
-              />
+                  control={
+                    <Checkbox
+                      checked={checkedProgress.at(progress.id)}
+                      onChange={e =>
+                        setCheckedProgress(
+                          updateChecked(checkedProgress, progress.id)
+                        )}
+                      name={String(progress.id)}
+                    />
+                  }
+                  label={progress.name}
+                />
               )}
             </FormGroup>
           </Row>
@@ -128,31 +134,15 @@ const SocialHousing = () => {
                       <Checkbox
                         checked={checkedRegion.at(region.id)}
                         onChange={e =>
-                          setCheckedRegion(updateChecked(checkedRegion, region.id))}
+                          setCheckedRegion(
+                            updateChecked(checkedRegion, region.id)
+                          )}
                         name={String(region.id)}
                       />
                     }
                     label={region.name}
                   />
                 )}
-            </FormGroup>
-          </Row>
-          <Row>
-            <FormLabel component="legend">興辦主體</FormLabel>
-            <FormGroup>
-              {governmentBarInfoList.map(gov => (
-                <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checkedGov.at(gov.id)}
-                    onChange={e => setCheckedGov(updateChecked(checkedGov, gov.id))}
-                    disabled={disableLocalCentral}
-                    name={String(gov.id)}
-                  />
-                }
-                label={gov.name}
-              />
-              ))}
             </FormGroup>
           </Row>
         </Col>
@@ -169,6 +159,25 @@ const SocialHousing = () => {
           </Row>
         </Col>
         <Col xs={2}>
+          <Row>
+            <FormLabel component="legend">興辦主體</FormLabel>
+            <FormGroup>
+              {governmentBarInfoList.map(gov =>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={checkedGov.at(gov.id)}
+                      onChange={e =>
+                        setCheckedGov(updateChecked(checkedGov, gov.id))}
+                      disabled={disableLocalCentral}
+                      name={String(gov.id)}
+                    />
+                  }
+                  label={gov.name}
+                />
+              )}
+            </FormGroup>
+          </Row>
           <Row>
             <FormControlLabel
               control={
