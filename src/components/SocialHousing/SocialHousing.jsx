@@ -33,6 +33,8 @@ const SocialHousing = () => {
   const [checkedRegion, setCheckedRegion] = useState([1, 1, 1, 1, 1, 1, 1]); // [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 其他縣市]
   const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
   const [disableLocalCentral, setDisableLocalCentral] = useState(false);
+  const [checkTpe2017, setCheckTpe2017] = useState(0);          // CheckBox 異動
+  const [triggerTpe2017, setTriggerTpe2017] = useState(false);  // 是否由世大運調整觸發
 
   const [rawData, setRawData] = useState([]);
   const [diagramData, setDiagramData] = useState([]);
@@ -60,16 +62,25 @@ const SocialHousing = () => {
       } else if (category === "a") {
         setBarColor(totalBarInfoList); // 每根 Bar 為總計
       }
+
+      let trigger2017 = false;
+      if (triggerTpe2017) {
+        trigger2017 = true;
+        setTriggerTpe2017(false);
+      }
+
       const d1 = aggregateData(
         rawData.sort((a, b) => parseInt(a.t) - parseInt(b.t)),
         category,
         checkedProgress,
         checkedRegion,
-        checkedGov
+        checkedGov,
+        checkTpe2017,
+        trigger2017
       );
       setDiagramData(d1);
     },
-    [rawData, category, checkedProgress, checkedRegion, checkedGov]
+    [rawData, category, checkedProgress, checkedRegion, checkedGov, checkTpe2017]
   );
 
   const uiOperation = e => {
@@ -177,6 +188,22 @@ const SocialHousing = () => {
                 />
               )}
             </FormGroup>
+          </Row>
+          <Row>
+            <FormLabel component="legend">特殊調整</FormLabel>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={checkTpe2017}
+                  onChange={e => {
+                    setCheckTpe2017(checkTpe2017 === 1 ? 0 : 1);
+                    setTriggerTpe2017(true);
+                  }}
+                  name="世大運社宅歸屬調整"
+                />
+              }
+              label="世大運社宅歸屬調整"
+            />
           </Row>
           <Row>
             <FormControlLabel
