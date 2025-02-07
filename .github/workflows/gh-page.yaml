@@ -27,6 +27,8 @@ jobs:
 
       - run: yarn install
       - run: yarn build --if-present
+        env:
+          CI: false
 
       - name: Deploy with gh-pages
         uses: peaceiris/actions-gh-pages@v4
