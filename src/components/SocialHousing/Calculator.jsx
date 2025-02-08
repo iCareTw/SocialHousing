@@ -11,6 +11,53 @@ const monthlyTotalCalculate = data => {
   }, {});
 };
 
+const adjustLegacy = (data, chk) => {
+  // FIXME: 如果一開始預設勾選 既有社宅調整 的話, 會有意想不到的 BUG, 但我決定忽視它
+  // 此為特殊處理, 因 202303 ~ 202411 揭露了 既有
+  //   此期間以前, 通通不計入既有                          -> 將此既有加入歷史
+  //   此期間以後, 又將既有通通納入到新完工, 並重新命名為已完工 -> 將此分拆出來
+  let chkAdj = chk === 1 ? 1 : -1;  // 是否有勾選 既有社宅調整
+  const monthlyTotal = monthlyTotalCalculate(data);
+
+  for (let item of data) {
+    if (monthlyTotal[item["t"]] === 0) continue; // 缺資料月份不處理
+
+    if (parseInt(item["t"]) < 202303 && item["c"] === "既有" && item["g"] === "地方") {
+      if (item["r"] === "臺北市") {
+        item["v"] += 5592 * chkAdj;
+      } else if (item["r"] === "新北市") {
+        item["v"] += 418 * chkAdj;
+      } else if (item["r"] === "高雄市") {
+        item["v"] += 241 * chkAdj;
+      } else if (item["r"] === "其他縣市") {
+        item["v"] += 6 * chkAdj;
+      }
+    } else if (parseInt(item["t"]) >= 202412 && item["g"] === "地方") {
+      if (item["c"] === "既有") {
+        if (item["r"] === "臺北市") {
+          item["v"] += 5508 * chkAdj;
+        } else if (item["r"] === "新北市") {
+          item["v"] += 453 * chkAdj;
+        } else if (item["r"] === "高雄市") {
+          item["v"] += 241 * chkAdj;
+        } else if (item["r"] === "其他縣市") {
+          item["v"] += 6 * chkAdj;
+        }
+      } else if (item["c"] === "新完工") {
+        if (item["r"] === "臺北市") {
+          item["v"] -= 5508 * chkAdj;
+        } else if (item["r"] === "新北市") {
+          item["v"] -= 453 * chkAdj;
+        } else if (item["r"] === "高雄市") {
+          item["v"] -= 241 * chkAdj;
+        } else if (item["r"] === "其他縣市") {
+          item["v"] -= 6 * chkAdj;
+        }
+      }
+    }
+  }
+  return data;
+}
 
 const adjustTpe2017 = (data, chk) => {
   // 此為特殊處理, 因林口世大運社會住宅屬於 內政部委託台北市政府興建
@@ -45,7 +92,7 @@ const adjustTpe2017 = (data, chk) => {
       } else if (item["r"] === "新北市" && item["g"] === "中央") {
         item["v"] -= 2907 * chkAdj;
       }
-    // 其他無關資料, 不處理
+    // else 為無關資料, 不處理
     }
   }
   return data;
@@ -59,7 +106,9 @@ export const aggregateData = (
   checkedRegion,
   checkedGov,
   checkTpe2017,
-  trigger2017
+  trigger2017,
+  checkLegacyBuilt,
+  triggerLegacy
 ) => {
   const ymRange = new Set(data.map(item => item.t));
 
@@ -82,6 +131,9 @@ export const aggregateData = (
 
   if (trigger2017) {  // 世大運社會住宅調整
     data = adjustTpe2017([...data], checkTpe2017);
+  }
+  if (triggerLegacy) {  // 早期社宅調整 && 需要比對前次是否有異動勾選既有
+    data = adjustLegacy([...data], checkLegacyBuilt);
   }
 
   return diagramProcessedData(

@@ -33,8 +33,12 @@ const SocialHousing = () => {
   const [checkedRegion, setCheckedRegion] = useState([1, 1, 1, 1, 1, 1, 1]); // [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 其他縣市]
   const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
   const [disableLocalCentral, setDisableLocalCentral] = useState(false);
-  const [checkTpe2017, setCheckTpe2017] = useState(0);          // CheckBox 異動
+
+  const [checkTpe2017, setCheckTpe2017] = useState(0);          // 選取 特殊調整 世大運
   const [triggerTpe2017, setTriggerTpe2017] = useState(false);  // 是否由世大運調整觸發
+
+  const [checkLegacyBuilt, setCheckLegacyBuilt] = useState(0);          // 選取 特殊調整 既有
+  const [triggerLegacyBuilt, setTriggerLegacyBuilt] = useState(false);  // 是否為民國早期建造之社宅
 
   const [rawData, setRawData] = useState([]);
   const [diagramData, setDiagramData] = useState([]);
@@ -69,6 +73,12 @@ const SocialHousing = () => {
         setTriggerTpe2017(false);
       }
 
+      let triggerLegacy = false;
+      if (triggerLegacyBuilt) {
+        triggerLegacy = true;
+        setTriggerLegacyBuilt(false);
+      }
+
       const d1 = aggregateData(
         rawData.sort((a, b) => parseInt(a.t) - parseInt(b.t)),
         category,
@@ -76,11 +86,13 @@ const SocialHousing = () => {
         checkedRegion,
         checkedGov,
         checkTpe2017,
-        trigger2017
+        trigger2017,
+        checkLegacyBuilt,
+        triggerLegacy
       );
       setDiagramData(d1);
     },
-    [rawData, category, checkedProgress, checkedRegion, checkedGov, checkTpe2017]
+    [rawData, category, checkedProgress, checkedRegion, checkedGov, checkTpe2017, checkLegacyBuilt]
   );
 
   const uiOperation = e => {
@@ -199,10 +211,30 @@ const SocialHousing = () => {
                     setCheckTpe2017(checkTpe2017 === 1 ? 0 : 1);
                     setTriggerTpe2017(true);
                   }}
-                  name="世大運社宅歸屬調整"
+                  name="世大運社宅調整"
                 />
               }
-              label="世大運社宅歸屬調整"
+              label="世大運社宅調整"
+            />
+          </Row>
+          <Row>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={checkLegacyBuilt}
+                  onChange={e => {
+                    setCheckLegacyBuilt(checkLegacyBuilt === 1 ? 0 : 1);  // UI 勾選與否刷新
+                    setTriggerLegacyBuilt(() => {
+                      if (checkLegacyBuilt === false) {
+                        return false
+                      } else {
+                        return true
+                      }
+                    });
+                  }}
+                />
+              }
+              label="既有社宅調整"
             />
           </Row>
           <Row>
