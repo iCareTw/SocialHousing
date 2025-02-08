@@ -28,7 +28,7 @@ console.error = () => {
 };
 
 const SocialHousing = () => {
-  const [category, setCategory] = useState("a"); // 主體s , 進度p, 中央地方g, 總計a
+  const [category, setCategory] = useState("a"); // 總計a, 中央地方g, 主體s , 進度p
   const [checkedProgress, setCheckedProgress] = useState([1, 1, 1, 1, 1]); // [既有 , 新完工 , 興建中 ,  待開工 , 規劃中]
   const [checkedRegion, setCheckedRegion] = useState([1, 1, 1, 1, 1, 1, 1]); // [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 其他縣市]
   const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
@@ -119,10 +119,10 @@ const SocialHousing = () => {
               onChange={e => uiOperation(e)}
               size="4"
             >
-              <option value="a">當期合計</option>
-              <option value="p">依進度別</option>
-              <option value="s">依興辦主體</option>
+              <option value="a">總計</option>
               <option value="g">依政府層級</option>
+              <option value="s">依興辦主體</option>
+              <option value="p">依進度別</option>
             </select>
           </Row>
           <Row>
