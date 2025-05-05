@@ -1,0 +1,9 @@
+{
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
+    "editor.tabSize": 2,
+    "editor.indentSize": "tabSize",
+    "editor.defaultFormatter": "bysabi.prettier-vscode-semistandard",
+    "editor.formatOnSave": false,
+    // "typescriptReact.format.semicolons": "insert",
+  },
+}
