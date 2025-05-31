@@ -9,7 +9,9 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  LabelList
+  LabelList,
+  ReferenceLine,
+  Brush,
 } from "recharts";
 import React from "react";
 
@@ -60,6 +62,8 @@ export const Diagrams = ({ data, barColor, maxY, autoMax }) => {
                   <LabelList dataKey="v" position="top" />
                 </Bar>
               )}
+              <ReferenceLine y={0} stroke="#000" />
+              <Brush dataKey="ym" height={30} stroke="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
         </div>
