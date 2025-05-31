@@ -59,7 +59,7 @@ const adjustLegacy = (data, chk) => {
   return data;
 }
 
-const adjustTpe2017 = (data, chk) => {
+const adjUniversiade2017 = (data, chk) => {
   // 此為特殊處理, 因林口世大運社會住宅屬於 內政部委託台北市政府興建
   // https://pip.moi.gov.tw/V3/F/SCRF0401.aspx
   // https://pip.moi.gov.tw/Upload/File/SocialHousing/社會住宅興辦計畫彙整表之執行進度-1070321(上網用).pdf
@@ -105,10 +105,10 @@ export const aggregateData = (
   checkedProgress,
   checkedRegion,
   checkedGov,
-  checkTpe2017,
-  trigger2017,
-  checkLegacyBuilt,
-  triggerLegacy
+  universiade2017,
+  trigUniversiade,
+  legacyBuilding,
+  trigLegacy
 ) => {
   const ymRange = new Set(data.map(item => item.t));
 
@@ -129,11 +129,11 @@ export const aggregateData = (
     (status, index) => checkedProgress[index] === 1
   );
 
-  if (trigger2017) {  // 世大運社會住宅調整
-    data = adjustTpe2017([...data], checkTpe2017);
+  if (trigUniversiade) {  // 世大運社會住宅調整
+    data = adjUniversiade2017([...data], universiade2017);
   }
-  if (triggerLegacy) {  // 早期社宅調整 && 需要比對前次是否有異動勾選既有
-    data = adjustLegacy([...data], checkLegacyBuilt);
+  if (trigLegacy) {  // 早期社宅調整 && 需要比對前次是否有異動勾選既有
+    data = adjustLegacy([...data], legacyBuilding);
   }
 
   return diagramProcessedData(

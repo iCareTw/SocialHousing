@@ -34,10 +34,10 @@ const SocialHousing = () => {
   const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
   const [disableLocalCentral, setDisableLocalCentral] = useState(false);
 
-  const [checkTpe2017, setCheckTpe2017] = useState(0);          // 選取 特殊調整 世大運
-  const [triggerTpe2017, setTriggerTpe2017] = useState(false);  // 是否由世大運調整觸發
+  const [universiade2017, setUniversiade2017] = useState(0);          // 選取 特殊調整 世大運
+  const [trigUniversiade2017, setTrigUniversiade2017] = useState(false);  // 是否由世大運調整觸發
 
-  const [checkLegacyBuilt, setCheckLegacyBuilt] = useState(0);          // 選取 特殊調整 既有
+  const [legacyBuilding, setlegacyBuilding] = useState(0);          // 選取 特殊調整 既有
   const [triggerLegacyBuilt, setTriggerLegacyBuilt] = useState(false);  // 是否為民國早期建造之社宅
 
   const [rawData, setRawData] = useState([]);
@@ -67,10 +67,10 @@ const SocialHousing = () => {
         setBarColor(totalBarInfoList); // 每根 Bar 為總計
       }
 
-      let trigger2017 = false;
-      if (triggerTpe2017) {
-        trigger2017 = true;
-        setTriggerTpe2017(false);
+      let trigUniversiade2017 = false;
+      if (trigUniversiade2017) {
+        trigUniversiade2017 = true;
+        setTrigUniversiade2017(false);
       }
 
       let triggerLegacy = false;
@@ -85,14 +85,14 @@ const SocialHousing = () => {
         checkedProgress,
         checkedRegion,
         checkedGov,
-        checkTpe2017,
-        trigger2017,
-        checkLegacyBuilt,
+        universiade2017,
+        trigUniversiade2017,
+        legacyBuilding,
         triggerLegacy
       );
       setDiagramData(d1);
     },
-    [rawData, category, checkedProgress, checkedRegion, checkedGov, checkTpe2017, checkLegacyBuilt]
+    [rawData, category, checkedProgress, checkedRegion, checkedGov, universiade2017, legacyBuilding]
   );
 
   const uiOperation = e => {
@@ -206,10 +206,10 @@ const SocialHousing = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={checkTpe2017}
+                  checked={universiade2017}
                   onChange={e => {
-                    setCheckTpe2017(checkTpe2017 === 1 ? 0 : 1);
-                    setTriggerTpe2017(true);
+                    setUniversiade2017(universiade2017 === 1 ? 0 : 1);
+                    setTrigUniversiade2017(true);
                   }}
                   name="世大運社宅調整"
                 />
@@ -221,11 +221,11 @@ const SocialHousing = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={checkLegacyBuilt}
+                  checked={legacyBuilding}
                   onChange={e => {
-                    setCheckLegacyBuilt(checkLegacyBuilt === 1 ? 0 : 1);  // UI 勾選與否刷新
+                    setlegacyBuilding(legacyBuilding === 1 ? 0 : 1);  // UI 勾選與否刷新
                     setTriggerLegacyBuilt(() => {
-                      if (checkLegacyBuilt === false) {
+                      if (legacyBuilding === false) {
                         return false
                       } else {
                         return true
