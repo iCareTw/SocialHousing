@@ -12,7 +12,7 @@ import Input from "@mui/material/Input";
 
 import { Diagrams } from "./Diagrams";
 import { aggregateData } from "./Calculator";
-import realData from "./data";
+import realData from "./data.json";
 import {
   subjectBarInfoList,
   progressBarInfoList,
@@ -34,11 +34,9 @@ const SocialHousing = () => {
   const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
   const [disableLocalCentral, setDisableLocalCentral] = useState(false);
 
+  // 特殊調整
   const [universiade2017, setUniversiade2017] = useState(0);          // 選取 特殊調整 世大運
-  const [trigUniversiade2017, setTrigUniversiade2017] = useState(false);  // 是否由世大運調整觸發
-
-  const [legacyBuilding, setlegacyBuilding] = useState(0);          // 選取 特殊調整 既有
-  const [triggerLegacyBuilt, setTriggerLegacyBuilt] = useState(false);  // 是否為民國早期建造之社宅
+  const [legacyBuilding, setLegacyBuilding] = useState(0);          // 選取 特殊調整 既有
 
   const [rawData, setRawData] = useState([]);
   const [diagramData, setDiagramData] = useState([]);
@@ -54,46 +52,41 @@ const SocialHousing = () => {
   };
 
   // 首次進入頁面, 一次式撈資料
-  useEffect(
-    () => {
-      setRawData(realData);
-      if (category === "p") {
-        setBarColor(progressBarInfoList); // 每根 Bar 區分為 完工類別
-      } else if (category === "s") {
-        setBarColor(subjectBarInfoList); // 每根 Bar 區分為 興辦主體
-      } else if (category === "g") {
-        setBarColor(governmentBarInfoList); // 每根 Bar 區分為 中央地方
-      } else if (category === "a") {
-        setBarColor(totalBarInfoList); // 每根 Bar 為總計
-      }
+  useEffect(() => {
+    setRawData(realData);
+  }, []);
 
-      let trigUniversiade2017 = false;
-      if (trigUniversiade2017) {
-        trigUniversiade2017 = true;
-        setTrigUniversiade2017(false);
-      }
+  // 設定圖表顏色
+  useEffect(() => {
+    if (category === "p") {
+      setBarColor(progressBarInfoList); // 每根 Bar 區分為 完工類別
+    } else if (category === "s") {
+      setBarColor(subjectBarInfoList); // 每根 Bar 區分為 興辦主體
+    } else if (category === "g") {
+      setBarColor(governmentBarInfoList); // 每根 Bar 區分為 中央地方
+    } else if (category === "a") {
+      setBarColor(totalBarInfoList); // 每根 Bar 為總計
+    }
+  }, [category]);
 
-      let triggerLegacy = false;
-      if (triggerLegacyBuilt) {
-        triggerLegacy = true;
-        setTriggerLegacyBuilt(false);
-      }
+  // 重新計算數據
+  useEffect(() => {
+    if (rawData.length === 0) return; // 等待資料載入完成
 
-      const d1 = aggregateData(
-        rawData.sort((a, b) => parseInt(a.t) - parseInt(b.t)),
-        category,
-        checkedProgress,
-        checkedRegion,
-        checkedGov,
-        universiade2017,
-        trigUniversiade2017,
-        legacyBuilding,
-        triggerLegacy
-      );
-      setDiagramData(d1);
-    },
-    [rawData, category, checkedProgress, checkedRegion, checkedGov, universiade2017, legacyBuilding]
-  );
+    let dataClone = [ ...rawData ];
+
+    const d1 = aggregateData(
+      dataClone.sort((a, b) => parseInt(a.t) - parseInt(b.t)),
+      category,
+      checkedProgress,
+      checkedRegion,
+      checkedGov,
+      universiade2017,
+      legacyBuilding,
+    );
+    setDiagramData(d1);
+
+  }, [rawData, category, checkedProgress, checkedRegion, checkedGov, universiade2017, legacyBuilding]);
 
   const uiOperation = e => {
     setCategory(e.target.value);
@@ -206,10 +199,9 @@ const SocialHousing = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={universiade2017}
+                  checked={universiade2017 === 1}
                   onChange={e => {
                     setUniversiade2017(universiade2017 === 1 ? 0 : 1);
-                    setTrigUniversiade2017(true);
                   }}
                   name="世大運社宅調整"
                 />
@@ -221,16 +213,9 @@ const SocialHousing = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={legacyBuilding}
+                  checked={legacyBuilding === 1}
                   onChange={e => {
-                    setlegacyBuilding(legacyBuilding === 1 ? 0 : 1);  // UI 勾選與否刷新
-                    setTriggerLegacyBuilt(() => {
-                      if (legacyBuilding === false) {
-                        return false
-                      } else {
-                        return true
-                      }
-                    });
+                    setLegacyBuilding(legacyBuilding === 1 ? 0 : 1);
                   }}
                 />
               }

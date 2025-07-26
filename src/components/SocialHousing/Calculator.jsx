@@ -1,4 +1,3 @@
-
 /*
   回傳像是年度 v 的加總, example:
   {'201703': 100, '201704': 200}
@@ -27,7 +26,6 @@ const monthlyTotalCalculate = data => {
 */
 const adjustLegacy = (data, gonnaAdjust) => {
   const monthlyTotal = monthlyTotalCalculate(data);
-
   if (!gonnaAdjust) return data; // 不調整, 直接返回原始值
 
   let result = []
@@ -97,8 +95,9 @@ const adjustLegacyValue = (item, adjFinished) => {
   201810 以後, 揭露資訊減少為 2907 戶 (當時列為新北市政府) (原因不明)
   202004 以後, 開始區分地方及中央, 完工歸屬到 新北市 中央
 */
-const adjUniversiade2017 = (data, shouldAdjustValue) => {
+const adjUniversiade2017 = (data, gonnaAdjust2017) => {
   const monthlyTotal = monthlyTotalCalculate(data);
+  if (!gonnaAdjust2017) return data; // 不調整, 直接返回原始值
 
   return data.map(item => {
     if (monthlyTotal[item["t"]] === 0) return { ...item }; // 缺資料月份不處理，返回拷貝
@@ -108,7 +107,7 @@ const adjUniversiade2017 = (data, shouldAdjustValue) => {
 
     if (item["c"] === "興建中" && timeInt < 201809) {
       // 201809 以前的興建中調整
-      if (shouldAdjustValue) {
+      if (gonnaAdjust2017) {
         if (item["r"] === "臺北市" && item["g"] === "地方") {
           newItem["v"] += 3408;
         } else if (item["r"] === "新北市" && item["g"] === "地方") {
@@ -118,7 +117,7 @@ const adjUniversiade2017 = (data, shouldAdjustValue) => {
     } else if (item["c"] === "新完工" && timeInt >= 201809 && timeInt < 202004) {
       // 201809-202003 期間的新完工調整 (201810起數量變為2907)
       const adjustmentValue = timeInt >= 201810 ? 2907 : 3408;
-      if (shouldAdjustValue) {
+      if (gonnaAdjust2017) {
         if (item["r"] === "臺北市" && item["g"] === "地方") {
           newItem["v"] += adjustmentValue;
         } else if (item["r"] === "新北市" && item["g"] === "地方") {
@@ -127,7 +126,7 @@ const adjUniversiade2017 = (data, shouldAdjustValue) => {
       }
     } else if (item["c"] === "新完工" && timeInt >= 202004) {
       // 202004 以後的新完工調整
-      if (shouldAdjustValue) {
+      if (gonnaAdjust2017) {
         if (item["r"] === "臺北市" && item["g"] === "地方") {
           newItem["v"] += 2907;
         } else if (item["r"] === "新北市" && item["g"] === "中央") {
@@ -135,7 +134,7 @@ const adjUniversiade2017 = (data, shouldAdjustValue) => {
         }
       }
     }
-    
+
     return newItem;
   });
 };
@@ -169,7 +168,7 @@ export const aggregateData = (
     (_, index) => checkedProgress[index] === 1
   );
 
-  // data = adjUniversiade2017(data, universiade2017 === 1);
+  data = adjUniversiade2017(data, universiade2017 === 1);
   data = adjustLegacy(data, checkAdjustLegacy === 1);
 
   return diagramProcessedData(
@@ -181,6 +180,7 @@ export const aggregateData = (
     filteredGov
   );
 };
+
 
 const diagramProcessedData = (
   category,
