@@ -1,6 +1,9 @@
+
+/*
+  回傳像是年度 v 的加總, example:
+  {'201703': 100, '201704': 200}
+*/
 const monthlyTotalCalculate = data => {
-  // 回傳像是年度 v 的加總, example:
-  // {'201703': 100, '201704': 200}
   return data.reduce((acc, item) => {
     if (acc[item.t]) {
       acc[item.t] += item.v;
@@ -11,91 +14,130 @@ const monthlyTotalCalculate = data => {
   }, {});
 };
 
-const adjustLegacy = (data, chk) => {
-  // FIXME: 如果一開始預設勾選 既有社宅調整 的話, 會有意想不到的 BUG, 但我決定忽視它
-  // 此為特殊處理, 因 202303 ~ 202411 揭露了 既有
-  //   此期間以前, 通通不計入既有                          -> 將此既有加入歷史
-  //   此期間以後, 又將既有通通納入到新完工, 並重新命名為已完工 -> 將此分拆出來
-  let chkAdj = chk === 1 ? 1 : -1;  // 是否有勾選 既有社宅調整
+
+/* 進行既有社宅的調整
+  params:
+  - data: 原始資料
+  - gonnaAdjust: 是否進行 既有 社宅調整
+  
+  既有社宅調整邏輯
+  此為特殊處理, 因 202303 ~ 202411 揭露了 既有
+  此期間以前, 通通不計入既有                          -> 將此既有加入歷史
+  此期間以後, 又將既有通通納入到新完工, 並重新命名為已完工 -> 將此分拆出來
+*/
+const adjustLegacy = (data, gonnaAdjust) => {
   const monthlyTotal = monthlyTotalCalculate(data);
 
-  for (let item of data) {
-    if (monthlyTotal[item["t"]] === 0) continue; // 缺資料月份不處理
+  if (!gonnaAdjust) return data; // 不調整, 直接返回原始值
 
-    if (parseInt(item["t"]) < 202303 && item["c"] === "既有" && item["g"] === "地方") {
-      if (item["r"] === "臺北市") {
-        item["v"] += 5592 * chkAdj;
-      } else if (item["r"] === "新北市") {
-        item["v"] += 418 * chkAdj;
-      } else if (item["r"] === "高雄市") {
-        item["v"] += 241 * chkAdj;
-      } else if (item["r"] === "其他縣市") {
-        item["v"] += 6 * chkAdj;
-      }
-    } else if (parseInt(item["t"]) >= 202412 && item["g"] === "地方") {
-      if (item["c"] === "既有") {
-        if (item["r"] === "臺北市") {
-          item["v"] += 5508 * chkAdj;
-        } else if (item["r"] === "新北市") {
-          item["v"] += 453 * chkAdj;
-        } else if (item["r"] === "高雄市") {
-          item["v"] += 241 * chkAdj;
-        } else if (item["r"] === "其他縣市") {
-          item["v"] += 6 * chkAdj;
-        }
-      } else if (item["c"] === "新完工") {
-        if (item["r"] === "臺北市") {
-          item["v"] -= 5508 * chkAdj;
-        } else if (item["r"] === "新北市") {
-          item["v"] -= 453 * chkAdj;
-        } else if (item["r"] === "高雄市") {
-          item["v"] -= 241 * chkAdj;
-        } else if (item["r"] === "其他縣市") {
-          item["v"] -= 6 * chkAdj;
-        }
-      }
+  let result = []
+  for (const item of data) {
+    if (monthlyTotal[item.t] === 0) { // 缺資料月份不處理，返回拷貝
+      result.push(item);
+      continue;
+    } else if (item.c !== "既有" && item.c !== "新完工") {  // 既有社宅的調整, 只會調整到 既有
+      result.push(item);
+      continue;
+    } else if (item.g !== "地方") {  // 只處理 地方 的社宅
+      result.push(item);
+      continue;
+    } else if (item.t >= 202303 && item.t <= 202411) {  // 只處理 202303 ~ 202411 的既有社宅
+      result.push(item);
+      continue;
+    } else if (item.r !== "臺北市" && item.r !== "新北市" && item.r !== "高雄市" && item.r !== "其他縣市") {  // 只處理這四個縣市
+      result.push(item);
+      continue;
+    } else {  // 既有社宅調整
+      let v = 0
+      let adjFinished = item.t <= 202302 ? 0 : -1;
+      v = item.v + adjustLegacyValue(item, adjFinished);
+      result.push({ ...item, v: v });
     }
   }
-  return data;
+  return result;
+} 
+
+
+/* 既有社宅實際調整值
+  t: 隨著時間經過, 既有社宅可能會減少. 留意社宅僅些漏 202303 ~ 202411
+  r: 只有地方 有既有社宅
+  g: 只有 臺北市 / 新北市 / 高雄市 / 其他縣市 有既有社宅
+  c: 只有 既有 / 新完工 需要做調整異動
+*/
+const adjustLegacyValue = (item, adjFinished) => {
+  let timeInt = parseInt(item.t);
+  let newVal = {}
+
+  if (timeInt < 202303) {
+    newVal = { "臺北市": 5592, "新北市": 418, "高雄市": 241, "其他縣市": 6 }
+  } else if (202412 <= timeInt <= 202505) {
+    newVal = { "臺北市": 5508, "新北市": 453, "高雄市": 241, "其他縣市": 6 }
+  } else if (timeInt >= 202506) {
+    newVal = { "臺北市": 5506, "新北市": 445, "高雄市": 241, "其他縣市": 6 }
+  }
+
+  if (item.c === "既有") {
+    return newVal[item.r];
+  } else if (item.c === "新完工") {
+    if (adjFinished === 0) {
+      return 0;  // 202302(含) 以前, 新完工社宅不需做調整
+    } else {
+      return -newVal[item.r];  // 202412(含) 以後, 新完工社宅已內含既有, 需扣除
+    }
+  }
 }
 
-const adjUniversiade2017 = (data, chk) => {
-  // 此為特殊處理, 因林口世大運社會住宅屬於 內政部委託台北市政府興建
-  // https://pip.moi.gov.tw/V3/F/SCRF0401.aspx
-  // https://pip.moi.gov.tw/Upload/File/SocialHousing/社會住宅興辦計畫彙整表之執行進度-1070321(上網用).pdf
-  // 20180831 完工
-  // 201809 以前, 揭露資訊為 3408 戶 (當時列為新北市政府)
-  // 201810 以後, 揭露資訊減少為 2907 戶 (當時列為新北市政府) (原因不明)
-  // 202004 以後, 開始區分地方及中央, 完工歸屬到 新北市 中央
 
-  let chkAdj = chk === 1 ? 1 : -1;
+/* 世大運社宅調整邏輯
+  此為特殊處理, 因林口世大運社會住宅屬於 內政部委託台北市政府興建
+  https://pip.moi.gov.tw/V3/F/SCRF0401.aspx
+  https://pip.moi.gov.tw/Upload/File/SocialHousing/社會住宅興辦計畫彙整表之執行進度-1070321(上網用).pdf
+  20180831 完工
+  201809 以前, 揭露資訊為 3408 戶 (當時列為新北市政府)
+  201810 以後, 揭露資訊減少為 2907 戶 (當時列為新北市政府) (原因不明)
+  202004 以後, 開始區分地方及中央, 完工歸屬到 新北市 中央
+*/
+const adjUniversiade2017 = (data, shouldAdjustValue) => {
   const monthlyTotal = monthlyTotalCalculate(data);
 
-  for (let item of data) {
-    if (monthlyTotal[item["t"]] === 0) continue; // 缺資料月份不處理
+  return data.map(item => {
+    if (monthlyTotal[item["t"]] === 0) return { ...item }; // 缺資料月份不處理，返回拷貝
 
-    if (item["c"] === "興建中" && parseInt(item["t"]) < 201809) {
-      if (item["r"] === "臺北市" && item["g"] === "地方") {
-        item["v"] += 3408 * chkAdj;
-      } else if (item["r"] === "新北市" && item["g"] === "地方") {
-        item["v"] -= 3408 * chkAdj;
+    const timeInt = parseInt(item["t"]);
+    const newItem = { ...item }; // 創建深拷貝
+
+    if (item["c"] === "興建中" && timeInt < 201809) {
+      // 201809 以前的興建中調整
+      if (shouldAdjustValue) {
+        if (item["r"] === "臺北市" && item["g"] === "地方") {
+          newItem["v"] += 3408;
+        } else if (item["r"] === "新北市" && item["g"] === "地方") {
+          newItem["v"] = Math.max(0, item["v"] - 3408);
+        }
       }
-    } else if (item["c"] === "新完工" && 201809 <= parseInt(item["t"]) && parseInt(item["t"]) < 202004) {
-      if (item["r"] === "臺北市" && item["g"] === "地方") {
-        item["v"] += 2907 * chkAdj;
-      } else if (item["r"] === "新北市" && item["g"] === "地方") {
-        item["v"] -= 2907 * chkAdj;
+    } else if (item["c"] === "新完工" && timeInt >= 201809 && timeInt < 202004) {
+      // 201809-202003 期間的新完工調整 (201810起數量變為2907)
+      const adjustmentValue = timeInt >= 201810 ? 2907 : 3408;
+      if (shouldAdjustValue) {
+        if (item["r"] === "臺北市" && item["g"] === "地方") {
+          newItem["v"] += adjustmentValue;
+        } else if (item["r"] === "新北市" && item["g"] === "地方") {
+          newItem["v"] = Math.max(0, item["v"] - adjustmentValue);
+        }
       }
-    } else if (item["c"] === "新完工" && parseInt(item["t"]) >= 202004) {
-      if (item["r"] === "臺北市" && item["g"] === "地方") {
-        item["v"] += 2907 * chkAdj;
-      } else if (item["r"] === "新北市" && item["g"] === "中央") {
-        item["v"] -= 2907 * chkAdj;
+    } else if (item["c"] === "新完工" && timeInt >= 202004) {
+      // 202004 以後的新完工調整
+      if (shouldAdjustValue) {
+        if (item["r"] === "臺北市" && item["g"] === "地方") {
+          newItem["v"] += 2907;
+        } else if (item["r"] === "新北市" && item["g"] === "中央") {
+          newItem["v"] = Math.max(0, item["v"] - 2907);
+        }
       }
-    // else 為無關資料, 不處理
     }
-  }
-  return data;
+    
+    return newItem;
+  });
 };
 
 
@@ -106,9 +148,7 @@ export const aggregateData = (
   checkedRegion,
   checkedGov,
   universiade2017,
-  trigUniversiade,
-  legacyBuilding,
-  trigLegacy
+  checkAdjustLegacy,
 ) => {
   const ymRange = new Set(data.map(item => item.t));
 
@@ -126,15 +166,11 @@ export const aggregateData = (
   if (checkedGov[1]) filteredGov.push("中央");
 
   const filteredProgress = ["既有", "新完工", "興建中", "已決標待開工", "規劃中"].filter(
-    (status, index) => checkedProgress[index] === 1
+    (_, index) => checkedProgress[index] === 1
   );
 
-  if (trigUniversiade) {  // 世大運社會住宅調整
-    data = adjUniversiade2017([...data], universiade2017);
-  }
-  if (trigLegacy) {  // 早期社宅調整 && 需要比對前次是否有異動勾選既有
-    data = adjustLegacy([...data], legacyBuilding);
-  }
+  // data = adjUniversiade2017(data, universiade2017 === 1);
+  data = adjustLegacy(data, checkAdjustLegacy === 1);
 
   return diagramProcessedData(
     category,
@@ -172,7 +208,7 @@ const diagramProcessedData = (
 
     let categorySet;
     if (itemKey === "t") {
-      categorySet = new Set("t");
+      categorySet = new Set(["t"]);
     } else {
       categorySet = new Set(rows.map(item => item[itemKey]));
     }
