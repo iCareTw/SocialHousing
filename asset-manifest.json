@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/SocialHousing/static/js/main.ed5c88a1.js",
+    "main.js": "/SocialHousing/static/js/main.a72e70c9.js",
     "index.html": "/SocialHousing/index.html",
-    "main.ed5c88a1.js.map": "/SocialHousing/static/js/main.ed5c88a1.js.map"
+    "main.a72e70c9.js.map": "/SocialHousing/static/js/main.a72e70c9.js.map"
   },
   "entrypoints": [
-    "static/js/main.ed5c88a1.js"
+    "static/js/main.a72e70c9.js"
   ]
 }
