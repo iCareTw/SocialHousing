@@ -2,6 +2,8 @@
 
 Github Page: https://icaretw.github.io/SocialHousing/
 
+最近一次資料更新: 2025/12/03 21:00
+
 # 台灣社會住宅資料視覺化專案
 
 這是一個基於 **React 的網頁應用程式**，用於視覺化台灣社會住宅發展進度與統計資料。這是一個資料視覺化儀表板，追蹤並顯示台灣各城市的社會住宅建設資料。
@@ -18,8 +20,6 @@ Github Page: https://icaretw.github.io/SocialHousing/
   - 興建中
   - 已決標待開工
   - 規劃中
-
-最近一次資料更新: 2025/11/07 10:30
 
 # 參照
 
