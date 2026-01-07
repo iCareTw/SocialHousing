@@ -4,6 +4,7 @@
 
 | 西元   | 本地備份                               | 原始資料來源                                                                                                    |
 |--------|----------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| 202512 | [11412](./pdf_SocialHousing/11412.pdf) | https://pip.moi.gov.tw/Upload/File/SocialHousing/(上網版)1141231-社會住宅興辦案件執行情形彙整表.pdf             |
 | 202511 | [11411](./pdf_SocialHousing/11411.pdf) | https://pip.moi.gov.tw/Upload/File/SocialHousing/1141031_b5010_mode7_ep01.pdf                                   |
 | 202510 | [11410](./pdf_SocialHousing/11410.pdf) | https://pip.moi.gov.tw/Upload/File/SocialHousing/(上網版)1141031-社會住宅興辦案件執行情形彙整表.pdf             |
 | 202509 | [11409](./pdf_SocialHousing/11409.pdf) | https://pip.moi.gov.tw/Upload/File/SocialHousing/(上網版)1140930-社會住宅興辦案件執行情形彙整表.pdf             |
