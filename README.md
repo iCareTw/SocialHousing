@@ -11,6 +11,7 @@ Github Page: https://icaretw.github.io/SocialHousing/
 起因於前總統蔡英文於 2016 年提出的「社會住宅八年二十萬戶」政策，旨在解決台灣的住房問題。此專案旨在提供一個清晰的視覺化介面，讓使用者能夠輕鬆了解各地社會住宅的建設進度。
 
 ## 🏠 功能說明：
+
 本應用程式展示台灣主要城市的社會住宅建設進度，資料分類包括：
 - **地區別**：六都（臺北市、新北市、桃園市、臺中市、臺南市、高雄市）+ 其他縣市
 - **興辦主體**：中央政府 vs 地方政府專案
@@ -21,7 +22,7 @@ Github Page: https://icaretw.github.io/SocialHousing/
   - 已決標待開工
   - 規劃中
 
-# 參照
+# 資料來源
 
 - 緣起: [社會住宅興辦計畫](https://pip.moi.gov.tw/V3/B/SCRB0501.aspx?mode=4)
 - 主要資料來源: [社會住宅推動進度](https://pip.moi.gov.tw/V3/B/SCRB0501.aspx?mode=7)
