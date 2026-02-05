@@ -2,7 +2,7 @@
 
 Github Page: https://icaretw.github.io/SocialHousing/
 
-最近一次資料更新: 2026/01/07 23:00
+最近一次資料更新: 2026/02/05 23:45
 
 # 台灣社會住宅資料視覺化專案
 
