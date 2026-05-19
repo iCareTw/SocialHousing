@@ -4,7 +4,7 @@
 */
 const monthlyTotalCalculate = data => {
   return data.reduce((acc, item) => {
-    if (acc[item.t]) {
+    if (item.t in acc) {
       acc[item.t] += item.v;
     } else {
       acc[item.t] = item.v;
@@ -25,8 +25,8 @@ const monthlyTotalCalculate = data => {
   此期間以後, 又將既有通通納入到新完工, 並重新命名為已完工 -> 將此分拆出來
 */
 const adjustLegacy = (data, gonnaAdjust) => {
-  const monthlyTotal = monthlyTotalCalculate(data);
   if (!gonnaAdjust) return data; // 不調整, 直接返回原始值
+  const monthlyTotal = monthlyTotalCalculate(data);
 
   let result = []
   for (const item of data) {
@@ -96,42 +96,34 @@ const adjustLegacyValue = (item, adjFinished) => {
   202004 以後, 開始區分地方及中央, 完工歸屬到 新北市 中央
 */
 const adjUniversiade2017 = (data, gonnaAdjust2017) => {
-  const monthlyTotal = monthlyTotalCalculate(data);
   if (!gonnaAdjust2017) return data; // 不調整, 直接返回原始值
+  const monthlyTotal = monthlyTotalCalculate(data);
 
   return data.map(item => {
     if (monthlyTotal[item["t"]] === 0) return { ...item }; // 缺資料月份不處理，返回拷貝
 
     const timeInt = parseInt(item["t"]);
-    const newItem = { ...item }; // 創建深拷貝
+    const newItem = { ...item };
 
     if (item["c"] === "興建中" && timeInt < 201809) {
-      // 201809 以前的興建中調整
-      if (gonnaAdjust2017) {
-        if (item["r"] === "臺北市" && item["g"] === "地方") {
-          newItem["v"] += 3408;
-        } else if (item["r"] === "新北市" && item["g"] === "地方") {
-          newItem["v"] = Math.max(0, item["v"] - 3408);
-        }
+      if (item["r"] === "臺北市" && item["g"] === "地方") {
+        newItem["v"] += 3408;
+      } else if (item["r"] === "新北市" && item["g"] === "地方") {
+        newItem["v"] = Math.max(0, item["v"] - 3408);
       }
     } else if (item["c"] === "新完工" && timeInt >= 201809 && timeInt < 202004) {
-      // 201809-202003 期間的新完工調整 (201810起數量變為2907)
+      // 201810起數量變為2907
       const adjustmentValue = timeInt >= 201810 ? 2907 : 3408;
-      if (gonnaAdjust2017) {
-        if (item["r"] === "臺北市" && item["g"] === "地方") {
-          newItem["v"] += adjustmentValue;
-        } else if (item["r"] === "新北市" && item["g"] === "地方") {
-          newItem["v"] = Math.max(0, item["v"] - adjustmentValue);
-        }
+      if (item["r"] === "臺北市" && item["g"] === "地方") {
+        newItem["v"] += adjustmentValue;
+      } else if (item["r"] === "新北市" && item["g"] === "地方") {
+        newItem["v"] = Math.max(0, item["v"] - adjustmentValue);
       }
     } else if (item["c"] === "新完工" && timeInt >= 202004) {
-      // 202004 以後的新完工調整
-      if (gonnaAdjust2017) {
-        if (item["r"] === "臺北市" && item["g"] === "地方") {
-          newItem["v"] += 2907;
-        } else if (item["r"] === "新北市" && item["g"] === "中央") {
-          newItem["v"] = Math.max(0, item["v"] - 2907);
-        }
+      if (item["r"] === "臺北市" && item["g"] === "地方") {
+        newItem["v"] += 2907;
+      } else if (item["r"] === "新北市" && item["g"] === "中央") {
+        newItem["v"] = Math.max(0, item["v"] - 2907);
       }
     }
 
@@ -168,8 +160,8 @@ export const aggregateData = (
     (_, index) => checkedProgress[index] === 1
   );
 
-  data = adjUniversiade2017(data, universiade2017 === 1);
-  data = adjustLegacy(data, checkAdjustLegacy === 1);
+  data = adjUniversiade2017(data, universiade2017);
+  data = adjustLegacy(data, checkAdjustLegacy);
 
   return diagramProcessedData(
     category,

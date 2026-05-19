@@ -27,6 +27,15 @@ console.error = () => {
   return;
 };
 
+const barColors = {
+  a: totalBarInfoList,
+  g: governmentBarInfoList,
+  s: subjectBarInfoList,
+  p: progressBarInfoList,
+};
+
+const sortedRealData = [...realData].sort((a, b) => parseInt(a.t) - parseInt(b.t));
+
 const SocialHousing = () => {
   const [category, setCategory] = useState("a"); // 總計a, 中央地方g, 主體s , 進度p
   const [checkedProgress, setCheckedProgress] = useState([1, 1, 1, 1, 1]); // [既有 , 新完工 , 興建中 ,  待開工 , 規劃中]
@@ -35,12 +44,10 @@ const SocialHousing = () => {
   const [disableLocalCentral, setDisableLocalCentral] = useState(false);
 
   // 特殊調整
-  const [universiade2017, setUniversiade2017] = useState(0);          // 選取 特殊調整 世大運
-  const [legacyBuilding, setLegacyBuilding] = useState(0);          // 選取 特殊調整 既有
+  const [universiade2017, setUniversiade2017] = useState(false);
+  const [legacyBuilding, setLegacyBuilding] = useState(false);
 
-  const [rawData, setRawData] = useState([]);
   const [diagramData, setDiagramData] = useState([]);
-  const [barColor, setBarColor] = useState([]);
 
   const [autoMax, setAutoMax] = useState(false);
   const [maxY, setMaxY] = useState(200000);
@@ -51,32 +58,10 @@ const SocialHousing = () => {
     );
   };
 
-  // 首次進入頁面, 一次式撈資料
-  useEffect(() => {
-    setRawData(realData);
-  }, []);
-
-  // 設定圖表顏色
-  useEffect(() => {
-    if (category === "p") {
-      setBarColor(progressBarInfoList); // 每根 Bar 區分為 完工類別
-    } else if (category === "s") {
-      setBarColor(subjectBarInfoList); // 每根 Bar 區分為 興辦主體
-    } else if (category === "g") {
-      setBarColor(governmentBarInfoList); // 每根 Bar 區分為 中央地方
-    } else if (category === "a") {
-      setBarColor(totalBarInfoList); // 每根 Bar 為總計
-    }
-  }, [category]);
-
   // 重新計算數據
   useEffect(() => {
-    if (rawData.length === 0) return; // 等待資料載入完成
-
-    let dataClone = [ ...rawData ];
-
     const d1 = aggregateData(
-      dataClone.sort((a, b) => parseInt(a.t) - parseInt(b.t)),
+      sortedRealData,
       category,
       checkedProgress,
       checkedRegion,
@@ -85,8 +70,7 @@ const SocialHousing = () => {
       legacyBuilding,
     );
     setDiagramData(d1);
-
-  }, [rawData, category, checkedProgress, checkedRegion, checkedGov, universiade2017, legacyBuilding]);
+  }, [category, checkedProgress, checkedRegion, checkedGov, universiade2017, legacyBuilding]);
 
   const uiOperation = e => {
     setCategory(e.target.value);
@@ -123,6 +107,7 @@ const SocialHousing = () => {
             <FormGroup>
               {progressBarInfoList.map(progress =>
                 <FormControlLabel
+                  key={progress.id}
                   control={
                     <Checkbox
                       checked={checkedProgress.at(progress.id)}
@@ -168,7 +153,7 @@ const SocialHousing = () => {
               category={category}
               selectedProgress={checkedProgress}
               data={diagramData}
-              barColor={barColor}
+              barColor={barColors[category]}
               maxY={maxY}
               autoMax={autoMax}
             />
@@ -180,6 +165,7 @@ const SocialHousing = () => {
             <FormGroup>
               {governmentBarInfoList.map(gov =>
                 <FormControlLabel
+                  key={gov.id}
                   control={
                     <Checkbox
                       checked={checkedGov.at(gov.id)}
@@ -199,10 +185,8 @@ const SocialHousing = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={universiade2017 === 1}
-                  onChange={e => {
-                    setUniversiade2017(universiade2017 === 1 ? 0 : 1);
-                  }}
+                  checked={universiade2017}
+                  onChange={() => setUniversiade2017(v => !v)}
                   name="世大運社宅調整"
                 />
               }
@@ -213,10 +197,8 @@ const SocialHousing = () => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={legacyBuilding === 1}
-                  onChange={e => {
-                    setLegacyBuilding(legacyBuilding === 1 ? 0 : 1);
-                  }}
+                  checked={legacyBuilding}
+                  onChange={() => setLegacyBuilding(v => !v)}
                 />
               }
               label="既有社宅調整"
@@ -244,7 +226,7 @@ const SocialHousing = () => {
               }}
               hidden={autoMax}
               defaultValue={maxY}
-              onChange={e => setMaxY(e.target.value)}
+              onChange={e => setMaxY(Number(e.target.value))}
             />
           </Row>
         </Col>
