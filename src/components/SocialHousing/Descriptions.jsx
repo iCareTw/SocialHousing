@@ -68,6 +68,9 @@ const HousingDescriptions = () => {
           202412(11312), 將 <code>既有</code> 併入到 <code>新完工</code> (pdf 欄位更名為{" "}
           <code>已完工</code>)
         </ListGroup.Item>
+        <ListGroup.Item>
+          202610(11510)起, 將 <code> 已決標待開工 </code> 與 <code> 興建中 </code> 合併揭露為 <code> 興建中 </code>; 將 <code>既有</code> 從 <code>新完工</code> 當中拆分出來
+        </ListGroup.Item>
       </ListGroup>
 
       <h2>

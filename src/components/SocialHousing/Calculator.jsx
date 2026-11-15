@@ -23,6 +23,7 @@ const monthlyTotalCalculate = data => {
   此為特殊處理, 因 202303 ~ 202411 揭露了 既有
   此期間以前, 通通不計入既有                          -> 將此既有加入歷史
   此期間以後, 又將既有通通納入到新完工, 並重新命名為已完工 -> 將此分拆出來
+  202610 起, 官方再次將既有從新完工拆分揭露           -> 不調整
 */
 const adjustLegacy = (data, gonnaAdjust) => {
   if (!gonnaAdjust) return data; // 不調整, 直接返回原始值
@@ -40,6 +41,9 @@ const adjustLegacy = (data, gonnaAdjust) => {
       result.push(item);
       continue;
     } else if (item.t >= 202303 && item.t <= 202411) {  // 只處理 202303 ~ 202411 的既有社宅
+      result.push(item);
+      continue;
+    } else if (item.t >= 202610) {  // 202610 起官方重新揭露 既有, 不需調整
       result.push(item);
       continue;
     } else if (item.r !== "臺北市" && item.r !== "新北市" && item.r !== "高雄市" && item.r !== "其他縣市") {  // 只處理這四個縣市
