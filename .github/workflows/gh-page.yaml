@@ -27,6 +27,10 @@ jobs:
           cache: 'yarn'
 
       - run: yarn install
+      - run: yarn lint
+      - run: yarn test --watchAll=false
+        env:
+          CI: true
       - run: yarn build --if-present
         env:
           CI: false
