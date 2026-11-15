@@ -11,8 +11,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `yarn start`：本機開發
 - `yarn build`：正式 build。CI (`.github/workflows/gh-page.yaml`) 在 push 到 `main` 時會 build 並部署到 gh-pages
-- `npx eslint src/...`：lint (設定是 `react-app`)
-- 目前沒有任何測試
+- `yarn lint`：eslint，含禁止串接比較 (`a <= b <= c`) 的規則
+- `CI=true yarn test --watchAll=false`：跑測試。`Calculator.test.js` 涵蓋既有社宅調整的每個期間邊界，新增邊界時要補對應案例
+- CI 依序跑 lint → test → build
 
 ## 架構
 
@@ -20,7 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `data.json`：所有資料，是扁平陣列，每列 `{t: "YYYYMM", r: 地區, g: "地方"|"中央", c: 進度, v: 戶數}`
   - 檔案很大 (8000+ 列)，**不要整份讀**，用 `jq` 查特定月份
-  - 由 repo 外部產生 (Google Sheet)，不要手改
+  - 每月由 user 手動擷取官方揭露資料，在 Google Sheet 整理後轉成 json 附加進來
 - `Calculator.jsx`：`aggregateData` 會先做兩個可選的資料修正，再依「合計 / 中央地方 / 地區 / 進度」分組：
   - `adjUniversiade2017`：把林口世大運社宅從新北市改算到臺北市
   - `adjustLegacy`：補上「既有」社宅的戶數。官方在不同期間的揭露方式不同，所以按年月分段處理，部分期間用寫死的數字補
