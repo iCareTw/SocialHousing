@@ -55,6 +55,7 @@ export const Diagrams = ({ data, barColor, maxY, autoMax }) => {
                 <Bar
                   key={barInfo.name} // 用來消除 warning
                   dataKey={barInfo.name}
+                  name={barInfo.label ?? barInfo.name}
                   stackId="a"
                   tick={{ angle: 45 }}
                   fill={barInfo.color}

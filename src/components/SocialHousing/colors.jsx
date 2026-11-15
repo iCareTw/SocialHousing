@@ -10,7 +10,7 @@ export const subjectBarInfoList = [
 
 export const progressBarInfoList = [
   { id: 0, name: "既有", color: "#0000FF" },
-  { id: 1, name: "新完工", color: "#28c7c7" },
+  { id: 1, name: "新完工", label: "已完工", color: "#28c7c7" },  // name 對應 data.json 官方欄位值, label 為本站用語
   { id: 2, name: "興建中", color: "#ffcc00" },
   { id: 3, name: "已決標待開工", color: "#75e561" },
   { id: 4, name: "規劃中", color: "#cdcdcd" }
