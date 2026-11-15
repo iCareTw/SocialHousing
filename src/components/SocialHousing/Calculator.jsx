@@ -72,7 +72,7 @@ const adjustLegacyValue = (item, adjFinished) => {
 
   if (timeInt < 202303) {
     newVal = { "臺北市": 5592, "新北市": 418, "高雄市": 241, "其他縣市": 6 }
-  } else if (202412 <= timeInt <= 202505) {
+  } else if (timeInt >= 202412 && timeInt <= 202505) {
     newVal = { "臺北市": 5508, "新北市": 453, "高雄市": 241, "其他縣市": 6 }
   } else if (timeInt >= 202506) {
     newVal = { "臺北市": 5506, "新北市": 445, "高雄市": 241, "其他縣市": 6 }
