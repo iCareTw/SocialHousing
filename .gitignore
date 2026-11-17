@@ -26,3 +26,6 @@ data/drafts/
 
 # Service Account
 *.sa.json
+
+# Playwright MCP 截圖與紀錄
+.playwright-mcp/
