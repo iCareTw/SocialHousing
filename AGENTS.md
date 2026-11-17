@@ -25,11 +25,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `data.json`：所有資料，是扁平陣列，每列 `{t: "YYYYMM", r: 地區, g: "地方"|"中央", c: 進度, v: 戶數}`
   - 檔案很大 (8000+ 列)，**不要整份讀**，用 `jq` 查特定月份
   - 每月由 user 手動擷取官方揭露資料，在 Google Sheet 整理後轉成 json 附加進來。`t` 必須是字串
-- `housingRows.ts`：進度、地區、中央/地方的固定清單與 `data.json` 的型別。官方出現新分類時 `housingRows.test.ts` 會失敗，要一起更新這裡、`colors.ts`，以及下方「格式異動」提到的說明與分期修正
+- `housingRows.ts`：進度、地區、中央/地方的固定清單與 `data.json` 的型別。官方出現新分類時 `housingRows.test.ts` 會失敗：把新分類加進這裡的清單後，`colors.ts` 缺顏色會無法通過型別檢查；另外要處理下方「格式異動」提到的說明與分期修正
 - `Calculator.ts`：`aggregateData` 會先做兩個可選的資料修正，再依「合計 / 中央地方 / 地區 / 進度」分組：
   - `adjUniversiade2017`：把林口世大運社宅從新北市改算到臺北市
   - `adjustLegacy`：補上「既有」社宅的戶數。官方在不同期間的揭露方式不同，所以按年月分段處理，部分期間用寫死的數字補
-- `SocialHousing.tsx`：畫面狀態與勾選框。勾選陣列的順序要和 `colors.ts`、`housingRows.ts` 的分類清單對齊
+- `colors.ts`：各分類的顏色與顯示名稱，長條與勾選框的順序直接沿用 `housingRows.ts` 的清單
+- `SocialHousing.tsx`：畫面狀態與勾選框
 - `Descriptions.tsx`：資料說明頁，記錄歷次官方格式異動。表格內容來自 `dataSources.ts`
 
 ## 每月資料更新 (`impl: YYYYMM` commit)
