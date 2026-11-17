@@ -1,24 +1,24 @@
 import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
+import tseslint from "typescript-eslint";
 
-export default [
+export default tseslint.config(
   { ignores: ["build/", "node_modules/"] },
   js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
-    files: ["src/**/*.{js,jsx}"],
+    files: ["src/**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
       globals: globals.browser,
-      parserOptions: { ecmaFeatures: { jsx: true } },
     },
     plugins: { "react-hooks": reactHooks },
     rules: {
-      // 與原 CRA (eslint-config-react-app) 的設定對齊
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "no-unused-vars": ["warn", { args: "none", ignoreRestSiblings: true }],
+      "@typescript-eslint/no-explicit-any": "error",
       "no-restricted-syntax": [
         "error",
         {
@@ -28,4 +28,4 @@ export default [
       ],
     },
   },
-];
+);

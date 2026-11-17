@@ -6,11 +6,11 @@ import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 
 const HousingDescriptions = () => {
-  const localPdf = (ym, source) => {
+  const localPdf = (ym: string, source: string) => {
     if (source === "-" || source === "") {
       return "-";
     } else {
-      const em = ym.slice(0, 4) - 1911 + ym.slice(4, 6);
+      const em = parseInt(ym.slice(0, 4)) - 1911 + ym.slice(4, 6);
       return (
         <a
           href={
@@ -27,7 +27,7 @@ const HousingDescriptions = () => {
     }
   };
 
-  const sourcePdf = (ym, originUrl) => {
+  const sourcePdf = (originUrl: string) => {
     if (originUrl === "-" || originUrl === "") {
       return "-";
     } else {
@@ -94,7 +94,7 @@ const HousingDescriptions = () => {
                 {localPdf(item.ym, item.source)}
               </td>
               <td>
-                {sourcePdf(item.ym, item.source)}
+                {sourcePdf(item.source)}
               </td>
             </tr>
           )}

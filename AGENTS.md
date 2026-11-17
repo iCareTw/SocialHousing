@@ -10,9 +10,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 指令
 
 - `yarn start`：本機開發 (Vite dev server)
-- `yarn build`：正式 build。CI (`.github/workflows/gh-page.yaml`) 在 push 到 `main` 時會 build 並部署到 gh-pages
+- `yarn build`：型別檢查 (`tsc`) 後正式 build。CI (`.github/workflows/gh-page.yaml`) 在 push 到 `main` 時會 build 並部署到 gh-pages
+- `yarn typecheck`：只跑型別檢查 (`tsc`)
 - `yarn lint`：eslint，含禁止串接比較 (`a <= b <= c`) 的規則
-- `yarn test`：用 Vitest 跑測試。`Calculator.test.js` 涵蓋既有社宅調整的每個期間邊界，新增邊界時要補對應案例
+- `yarn test`：用 Vitest 跑測試
+  - `Calculator.test.ts` 涵蓋既有社宅調整的每個期間邊界，新增邊界時要補對應案例
+  - `housingRows.test.ts` 檢查 `data.json` 每一列的年月格式、分類值與戶數
 - CI 依序跑 lint → test → build
 
 ## 架構
@@ -21,26 +24,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `data.json`：所有資料，是扁平陣列，每列 `{t: "YYYYMM", r: 地區, g: "地方"|"中央", c: 進度, v: 戶數}`
   - 檔案很大 (8000+ 列)，**不要整份讀**，用 `jq` 查特定月份
-  - 每月由 user 手動擷取官方揭露資料，在 Google Sheet 整理後轉成 json 附加進來
-- `Calculator.jsx`：`aggregateData` 會先做兩個可選的資料修正，再依「合計 / 中央地方 / 地區 / 進度」分組：
+  - 每月由 user 手動擷取官方揭露資料，在 Google Sheet 整理後轉成 json 附加進來。`t` 必須是字串
+- `housingRows.ts`：進度、地區、中央/地方的固定清單與 `data.json` 的型別。官方出現新分類時 `housingRows.test.ts` 會失敗，要一起更新這裡、`colors.ts`，以及下方「格式異動」提到的說明與分期修正
+- `Calculator.ts`：`aggregateData` 會先做兩個可選的資料修正，再依「合計 / 中央地方 / 地區 / 進度」分組：
   - `adjUniversiade2017`：把林口世大運社宅從新北市改算到臺北市
   - `adjustLegacy`：補上「既有」社宅的戶數。官方在不同期間的揭露方式不同，所以按年月分段處理，部分期間用寫死的數字補
-- `SocialHousing.jsx`：畫面狀態與勾選框。勾選陣列的順序要和 `colors.jsx` 裡的分類清單、`Calculator.jsx` 裡的 `filteredProgress` 對齊
-- `Descriptions.jsx`：資料說明頁，記錄歷次官方格式異動。表格內容來自 `dataSources.jsx`
+- `SocialHousing.tsx`：畫面狀態與勾選框。勾選陣列的順序要和 `colors.ts`、`housingRows.ts` 的分類清單對齊
+- `Descriptions.tsx`：資料說明頁，記錄歷次官方格式異動。表格內容來自 `dataSources.ts`
 
 ## 每月資料更新 (`impl: YYYYMM` commit)
 
 一次更新會一起改這些檔案：
 - `data/pdf_SocialHousing/<民國年月>.pdf`：PDF 本地備份，例如 202610 → `11510.pdf`
-- `data/README.md` 與 `dataSources.jsx`：在最上方加一列官方 PDF 網址
+- `data/README.md` 與 `dataSources.ts`：在最上方加一列官方 PDF 網址
 - `data.json`
 - `README.md`：「最近一次資料更新」時間
 
 `latest` (最新資料年月) 另外用 `chore: 最新資料年月` 提交。
 
 官方 PDF 格式常常改，例如進度分類合併或拆分、既有社宅改併入或拆出新完工。遇到格式異動時：
-- 在 `Descriptions.jsx` 補一條說明
-- 檢查 `Calculator.jsx` 的分段修正需不需要加新的年月邊界
+- 在 `Descriptions.tsx` 補一條說明
+- 檢查 `Calculator.ts` 的分段修正需不需要加新的年月邊界
 
 ## Agent skills
 

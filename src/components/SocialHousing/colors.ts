@@ -1,4 +1,12 @@
-export const subjectBarInfoList = [
+/** 圖表的一組長條：name 為資料中的分類值，label 為畫面顯示名稱 (未設定時沿用 name) */
+export interface BarInfo {
+  id: number;
+  name: string;
+  label?: string;
+  color: string;
+}
+
+export const subjectBarInfoList: BarInfo[] = [
   { id: 0, name: "臺北市", color: "#28c7c7" },
   { id: 1, name: "新北市", color: "#0000FF" },
   { id: 2, name: "桃園市", color: "#e8606a" },
@@ -8,7 +16,7 @@ export const subjectBarInfoList = [
   { id: 6, name: "其他縣市", color: "#e5e561" }
 ];
 
-export const progressBarInfoList = [
+export const progressBarInfoList: BarInfo[] = [
   { id: 0, name: "既有", color: "#0000FF" },
   { id: 1, name: "新完工", label: "已完工", color: "#28c7c7" },  // name 對應 data.json 官方欄位值, label 為本站用語
   { id: 2, name: "興建中", color: "#ffcc00" },
@@ -16,11 +24,11 @@ export const progressBarInfoList = [
   { id: 4, name: "規劃中", color: "#cdcdcd" }
 ];
 
-export const governmentBarInfoList = [
+export const governmentBarInfoList: BarInfo[] = [
   { id: 0, name: "地方", color: "#86e056" },
   { id: 1, name: "中央", color: "#ffcf2d" }
 ];
 
-export const totalBarInfoList = [
+export const totalBarInfoList: BarInfo[] = [
   { id: 0, name: "合計", color: "#66B2FF" },
 ];

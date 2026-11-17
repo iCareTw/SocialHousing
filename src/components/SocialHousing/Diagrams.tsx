@@ -13,8 +13,21 @@ import {
   ReferenceLine,
   Brush,
 } from "recharts";
+import type { TextProps } from "recharts";
+import type { ChartPoint } from "./Calculator";
+import type { BarInfo } from "./colors";
 
-export const Diagrams = ({ data, barColor, maxY, autoMax }) => {
+// recharts 的 tick 型別未列出 angle，但實際會傳給刻度文字 (Text) 旋轉
+const Y_AXIS_TICK: TextProps = { angle: -30 };
+
+interface DiagramsProps {
+  data: ChartPoint[];
+  barColor: BarInfo[];
+  maxY: number;
+  autoMax: boolean;
+}
+
+export const Diagrams = ({ data, barColor, maxY, autoMax }: DiagramsProps) => {
   return (
     <div>
       <Container className="container pt-3">
@@ -34,21 +47,21 @@ export const Diagrams = ({ data, barColor, maxY, autoMax }) => {
               <CartesianGrid strokeDasharray="7 7" />
               <XAxis dataKey="t" />
               <YAxis
-                angle={-30}
-                tickFormatter={tick => {
+                tick={Y_AXIS_TICK}
+                tickFormatter={(tick: number) => {
                   return tick.toLocaleString();
                 }}
                 scale="linear"
                 min={1000}
                 domain={[
                   0,
-                  dataMax => {
+                  (dataMax: number) => {
                     if (autoMax) return Math.ceil(dataMax / 2000) * 2000;
                     return maxY;
                   }
                 ]}
               />
-              <Tooltip formatter={value => value && value.toLocaleString()} />
+              <Tooltip formatter={(value: number) => value && value.toLocaleString()} />
               <Legend height={18} />
               {barColor.map(barInfo =>
                 <Bar
@@ -56,7 +69,6 @@ export const Diagrams = ({ data, barColor, maxY, autoMax }) => {
                   dataKey={barInfo.name}
                   name={barInfo.label ?? barInfo.name}
                   stackId="a"
-                  tick={{ angle: 45 }}
                   fill={barInfo.color}
                 >
                   <LabelList dataKey="v" position="top" />
