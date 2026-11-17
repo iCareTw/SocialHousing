@@ -36,6 +36,7 @@ jobs:
           CI: false
 
       - name: Deploy with gh-pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
