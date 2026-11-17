@@ -13,7 +13,6 @@ import {
   ReferenceLine,
   Brush,
 } from "recharts";
-import React from "react";
 
 export const Diagrams = ({ data, barColor, maxY, autoMax }) => {
   return (

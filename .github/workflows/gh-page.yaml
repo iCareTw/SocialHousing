@@ -28,12 +28,8 @@ jobs:
 
       - run: yarn install
       - run: yarn lint
-      - run: yarn test --watchAll=false
-        env:
-          CI: true
-      - run: yarn build --if-present
-        env:
-          CI: false
+      - run: yarn test
+      - run: yarn build
 
       - name: Deploy with gh-pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
