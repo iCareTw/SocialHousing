@@ -1,4 +1,4 @@
-import { useState, useEffect, type ChangeEvent } from "react";
+import { useState, useMemo, type ChangeEvent } from "react";
 
 import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
@@ -11,7 +11,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Input from "@mui/material/Input";
 
 import { Diagrams } from "./Diagrams";
-import { aggregateData, type Category, type ChartPoint, type CheckedList } from "./Calculator";
+import { aggregateData, type Category, type CheckedList } from "./Calculator";
 import { housingRows } from "./housingRows";
 import {
   subjectBarInfoList,
@@ -48,7 +48,6 @@ const SocialHousing = () => {
   const [universiade2017, setUniversiade2017] = useState(false);
   const [legacyBuilding, setLegacyBuilding] = useState(false);
 
-  const [diagramData, setDiagramData] = useState<ChartPoint[]>([]);
 
   const [autoMax, setAutoMax] = useState(false);
   const [maxY, setMaxY] = useState(200000);
@@ -59,19 +58,20 @@ const SocialHousing = () => {
     );
   };
 
-  // 重新計算數據
-  useEffect(() => {
-    const d1 = aggregateData(
-      sortedRealData,
-      category,
-      checkedProgress,
-      checkedRegion,
-      checkedGov,
-      universiade2017,
-      legacyBuilding,
-    );
-    setDiagramData(d1);
-  }, [category, checkedProgress, checkedRegion, checkedGov, universiade2017, legacyBuilding]);
+  // 選項改變時重新計算數據
+  const diagramData = useMemo(
+    () =>
+      aggregateData(
+        sortedRealData,
+        category,
+        checkedProgress,
+        checkedRegion,
+        checkedGov,
+        universiade2017,
+        legacyBuilding,
+      ),
+    [category, checkedProgress, checkedRegion, checkedGov, universiade2017, legacyBuilding]
+  );
 
   const uiOperation = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value as Category;
