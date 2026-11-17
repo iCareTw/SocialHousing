@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
 
 import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
@@ -11,13 +11,14 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Input from "@mui/material/Input";
 
 import { Diagrams } from "./Diagrams";
-import { aggregateData } from "./Calculator";
-import realData from "./data.json";
+import { aggregateData, type Category, type ChartPoint, type CheckedList } from "./Calculator";
+import { housingRows } from "./housingRows";
 import {
   subjectBarInfoList,
   progressBarInfoList,
   governmentBarInfoList,
-  totalBarInfoList
+  totalBarInfoList,
+  type BarInfo
 } from "./colors";
 
 // 排除惱人的 warning 警告訊息:
@@ -27,32 +28,32 @@ console.error = () => {
   return;
 };
 
-const barColors = {
+const barColors: Record<Category, BarInfo[]> = {
   a: totalBarInfoList,
   g: governmentBarInfoList,
   s: subjectBarInfoList,
   p: progressBarInfoList,
 };
 
-const sortedRealData = [...realData].sort((a, b) => parseInt(a.t) - parseInt(b.t));
+const sortedRealData = [...housingRows].sort((a, b) => parseInt(a.t) - parseInt(b.t));
 
 const SocialHousing = () => {
-  const [category, setCategory] = useState("a"); // 總計a, 中央地方g, 主體s , 進度p
-  const [checkedProgress, setCheckedProgress] = useState([1, 1, 1, 1, 1]); // [既有 , 已完工 , 興建中 ,  待開工 , 規劃中]
-  const [checkedRegion, setCheckedRegion] = useState([1, 1, 1, 1, 1, 1, 1]); // [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 其他縣市]
-  const [checkedGov, setCheckedGov] = useState([1, 1]); // [地方, 中央]
+  const [category, setCategory] = useState<Category>("a"); // 總計a, 中央地方g, 主體s , 進度p
+  const [checkedProgress, setCheckedProgress] = useState<CheckedList>([1, 1, 1, 1, 1]); // [既有 , 已完工 , 興建中 ,  待開工 , 規劃中]
+  const [checkedRegion, setCheckedRegion] = useState<CheckedList>([1, 1, 1, 1, 1, 1, 1]); // [臺北市, 新北市, 桃園市, 臺中市, 臺南市, 高雄市, 其他縣市]
+  const [checkedGov, setCheckedGov] = useState<CheckedList>([1, 1]); // [地方, 中央]
   const [disableLocalCentral, setDisableLocalCentral] = useState(false);
 
   // 特殊調整
   const [universiade2017, setUniversiade2017] = useState(false);
   const [legacyBuilding, setLegacyBuilding] = useState(false);
 
-  const [diagramData, setDiagramData] = useState([]);
+  const [diagramData, setDiagramData] = useState<ChartPoint[]>([]);
 
   const [autoMax, setAutoMax] = useState(false);
   const [maxY, setMaxY] = useState(200000);
 
-  const updateChecked = (originalList, idx) => {
+  const updateChecked = (originalList: CheckedList, idx: number): CheckedList => {
     return originalList.map(
       (value, index) => (index === idx ? (value === 1 ? 0 : 1) : value)
     );
@@ -72,10 +73,11 @@ const SocialHousing = () => {
     setDiagramData(d1);
   }, [category, checkedProgress, checkedRegion, checkedGov, universiade2017, legacyBuilding]);
 
-  const uiOperation = e => {
-    setCategory(e.target.value);
+  const uiOperation = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value as Category;
+    setCategory(value);
 
-    if (e.target.value === "g") {
+    if (value === "g") {
       setDisableLocalCentral(true);
       setCheckedGov([1, 1]);
     } else {
@@ -94,7 +96,7 @@ const SocialHousing = () => {
               name="byCategory"
               defaultValue={category}
               onChange={e => uiOperation(e)}
-              size="4"
+              size={4}
             >
               <option value="a">總計</option>
               <option value="g">依政府層級</option>
@@ -110,8 +112,8 @@ const SocialHousing = () => {
                   key={progress.id}
                   control={
                     <Checkbox
-                      checked={checkedProgress.at(progress.id)}
-                      onChange={e =>
+                      checked={checkedProgress.at(progress.id) === 1}
+                      onChange={() =>
                         setCheckedProgress(
                           updateChecked(checkedProgress, progress.id)
                         )}
@@ -133,8 +135,8 @@ const SocialHousing = () => {
                     key={region.id}
                     control={
                       <Checkbox
-                        checked={checkedRegion.at(region.id)}
-                        onChange={e =>
+                        checked={checkedRegion.at(region.id) === 1}
+                        onChange={() =>
                           setCheckedRegion(
                             updateChecked(checkedRegion, region.id)
                           )}
@@ -150,8 +152,6 @@ const SocialHousing = () => {
         <Col xs={8}>
           <Row>
             <Diagrams
-              category={category}
-              selectedProgress={checkedProgress}
               data={diagramData}
               barColor={barColors[category]}
               maxY={maxY}
@@ -168,8 +168,8 @@ const SocialHousing = () => {
                   key={gov.id}
                   control={
                     <Checkbox
-                      checked={checkedGov.at(gov.id)}
-                      onChange={e =>
+                      checked={checkedGov.at(gov.id) === 1}
+                      onChange={() =>
                         setCheckedGov(updateChecked(checkedGov, gov.id))}
                       disabled={disableLocalCentral}
                       name={String(gov.id)}
@@ -209,7 +209,7 @@ const SocialHousing = () => {
               control={
                 <Checkbox
                   checked={autoMax}
-                  onChange={e => setAutoMax(!autoMax)}
+                  onChange={() => setAutoMax(!autoMax)}
                   name="3"
                 />
               }

@@ -44,7 +44,7 @@ const Nav = () => {
             target="_blank"
             rel="noreferrer"
           >
-            Source Code <img src={srcCode} class="img-fluid" alt="原始碼" />
+            Source Code <img src={srcCode} className="img-fluid" alt="原始碼" />
           </a>
         </li>
       </ul>
