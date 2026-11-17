@@ -50,9 +50,8 @@ const adjustLegacy = (data, gonnaAdjust) => {
       result.push(item);
       continue;
     } else {  // 既有社宅調整
-      let v = 0
       let adjFinished = item.t <= 202302 ? 0 : -1;
-      v = item.v + adjustLegacyValue(item, adjFinished);
+      const v = item.v + adjustLegacyValue(item, adjFinished);
       result.push({ ...item, v: v });
     }
   }

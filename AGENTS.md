@@ -4,15 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 專案
 
-台灣社會住宅興辦進度的視覺化網站 (React, Create React App)。發布在 GitHub Pages：https://icaretw.github.io/SocialHousing/
+台灣社會住宅興辦進度的視覺化網站 (React, Vite)。發布在 GitHub Pages：https://icaretw.github.io/SocialHousing/
 資料來源是內政部不動產資訊平台 (`pip.moi.gov.tw`) 每月公告的「社會住宅興辦案件執行情形彙整表」PDF。
 
 ## 指令
 
-- `yarn start`：本機開發
+- `yarn start`：本機開發 (Vite dev server)
 - `yarn build`：正式 build。CI (`.github/workflows/gh-page.yaml`) 在 push 到 `main` 時會 build 並部署到 gh-pages
 - `yarn lint`：eslint，含禁止串接比較 (`a <= b <= c`) 的規則
-- `CI=true yarn test --watchAll=false`：跑測試。`Calculator.test.js` 涵蓋既有社宅調整的每個期間邊界，新增邊界時要補對應案例
+- `yarn test`：用 Vitest 跑測試。`Calculator.test.js` 涵蓋既有社宅調整的每個期間邊界，新增邊界時要補對應案例
 - CI 依序跑 lint → test → build
 
 ## 架構

@@ -1,3 +1,4 @@
+import { describe, expect, test } from "vitest";
 import { aggregateData } from "./Calculator";
 
 // 既有社宅調整的期間邊界, 規則見 docs/adr/0001-保留官方原始數字並以可開關修正處理揭露格式異動.md
