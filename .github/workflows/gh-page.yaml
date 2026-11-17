@@ -37,3 +37,33 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
+
+  # PR 的每個 commit 都要能單獨 build, 確保 revert / bisect 時任一版本可用
+  build-each-commit:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: 'yarn'
+
+      - name: Build every commit in the PR
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+          CI: false  # CRA 時期的 commit 在 CI=true 時會把 warning 當成錯誤
+        run: |
+          for c in $(git rev-list --reverse "$BASE..$HEAD"); do
+            echo "::group::$(git log -1 --format='%h %s' "$c")"
+            git checkout -q "$c"
+            yarn install --frozen-lockfile --silent
+            yarn build
+            echo "::endgroup::"
+          done
